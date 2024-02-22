@@ -18,7 +18,7 @@ export default function ExpenseForm() {
 
   useEffect(() => {
     getExpenses();
-  }, [getExpenses]);
+  }, []);
 
   const { title, amount, category, description } = inputState;
 
@@ -47,7 +47,27 @@ export default function ExpenseForm() {
   };
 
   return (
-    <div className="min-h-screen lg:mt-20  ">
+    <div className="min-h-screen self-center ">
+      <div className=" justify-center items-center ">
+        <div className="space-y-4 flex gap-9 ml-9">
+          {expenses.map((income) => {
+            const { _id, title, amount, category, type } = income;
+            console.log(income);
+            return (
+              <IncomeItem
+                key={_id}
+                id={_id}
+                title={title}
+                // description={description}
+                amount={amount}
+                type={type}
+                category={category}
+                deleteItem={deleteExpense}
+              />
+            );
+          })}
+        </div>
+      </div>
       <div className="flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-5">
         {/* left */}
         <div className="flex-1 lg:mt-10">
@@ -128,18 +148,6 @@ export default function ExpenseForm() {
               </Alert>
             )}
           </form>
-        </div>
-      </div>
-      <div className="md:flex-1">
-        <div className="space-y-4">
-          {expenses &&
-            expenses.map((income) => (
-              <IncomeItem
-                key={income._id}
-                {...income}
-                deleteItem={deleteExpense}
-              />
-            ))}
         </div>
       </div>
     </div>
