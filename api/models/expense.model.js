@@ -1,11 +1,7 @@
 import mongoose from "mongoose";
 
-const expenseSchema = new mongoose.Schema(
+const ExpenseSchema = new mongoose.Schema(
   {
-    userId: {
-      type: String,
-      required: true,
-    },
     title: {
       type: String,
       required: true,
@@ -18,6 +14,15 @@ const expenseSchema = new mongoose.Schema(
       maxLength: 20,
       trim: true,
     },
+    type: {
+      type: String,
+      default: "expense",
+    },
+    date: {
+      type: Date,
+      trim: true,
+      default: "",
+    },
     category: {
       type: String,
       required: true,
@@ -29,15 +34,10 @@ const expenseSchema = new mongoose.Schema(
       maxLength: 20,
       trim: true,
     },
-    date: {
-      type: Date,
-      required: true,
-      trim: true,
-    },
   },
   { timestamps: true }
 );
 
-const Expense = mongoose.model("Expense", expenseSchema);
+const Expense = mongoose.model("Expense", ExpenseSchema);
 
 export default Expense;
