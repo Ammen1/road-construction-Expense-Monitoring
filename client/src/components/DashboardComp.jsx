@@ -78,7 +78,7 @@ export default function DashboardComp() {
             <div className="">
               <h3 className="text-gray-500 text-md uppercase">Expenses</h3>
               <h2 className="total-Expenses justify-center items-center">
-                Total Expense: <span>${totalExpenses}</span>
+                Total Expense: <span>${totalExpenses()}</span>
               </h2>
             </div>
             <HiDocumentText className="bg-lime-600  text-white rounded-full text-5xl p-3 shadow-lg" />
