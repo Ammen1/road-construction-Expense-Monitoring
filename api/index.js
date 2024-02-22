@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import authRoutes from "./routes/auth.route.js";
 import userRoutes from "./routes/user.route.js";
 import expense from "./routes/expense.route.js";
+import cors from "cors";
 
 import cookieParser from "cookie-parser";
 import path from "path";
@@ -22,6 +23,7 @@ mongoose
 const __dirname = path.resolve();
 
 const app = express();
+app.use(cors());
 
 app.use(express.json());
 app.use(cookieParser());
