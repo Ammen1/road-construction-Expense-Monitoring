@@ -1,5 +1,6 @@
 import { errorHandler } from "../utils/error.js";
 import Expense from "../models/expense.model.js";
+import mongoose from "mongoose";
 
 export const addExpense = async (req, res) => {
   const { title, amount, category, description } = req.body;
@@ -41,8 +42,11 @@ export const getExpense = async (req, res) => {
 };
 
 export const deleteExpense = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.params.id;
   try {
+    if (!mongoose.Types.id.isValid(id)) {
+      return res.status(400).json({ error: "Invalid id" });
+    }
     const deletedExpense = await Expense.findByIdAndDelete(id);
     if (!deletedExpense) {
       return res.status(404).json({ message: "Expense not found" });
