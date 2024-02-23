@@ -51,7 +51,6 @@ export default function DashboardComp() {
       fetchUsers();
       fetchPosts();
       getExpenses();
-      console.log(totalExpenses);
     }
   }, [currentUser]);
   return (

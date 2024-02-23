@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { FaCheck, FaTimes } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 export default function DashUsers() {
   const { currentUser } = useSelector((state) => state.user);
@@ -10,6 +11,9 @@ export default function DashUsers() {
   const [showMore, setShowMore] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [userIdToDelete, setUserIdToDelete] = useState("");
+  const [showAddManagerModal, setShowAddManagerModal] = useState(false);
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -28,7 +32,7 @@ export default function DashUsers() {
     if (currentUser.isAdmin) {
       fetchUsers();
     }
-  }, [currentUser._id, currentUser.isAdmin]);
+  }, [currentUser._id]);
 
   const handleShowMore = async () => {
     const startIndex = users.length;
@@ -63,17 +67,31 @@ export default function DashUsers() {
     }
   };
 
+  const handleAddManager = async () => {
+    if (currentUser.isAdmin) {
+      navigate("/add-users");
+    } else {
+      console.log("You do not have permission to add a manager.");
+    }
+  };
+
   return (
     <div className="table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
+      <Button className="right-0" onClick={handleAddManager}>
+        Add Manager
+      </Button>
       {currentUser.isAdmin && users.length > 0 ? (
         <>
-          <Table hoverable className="shadow-md">
+          <Table hoverable className="shadow-md mt-10">
             <Table.Head>
               <Table.HeadCell>Date created</Table.HeadCell>
               <Table.HeadCell>User image</Table.HeadCell>
               <Table.HeadCell>Username</Table.HeadCell>
               <Table.HeadCell>Email</Table.HeadCell>
               <Table.HeadCell>Admin</Table.HeadCell>
+              <Table.HeadCell>Manager</Table.HeadCell>
+              <Table.HeadCell>Finance</Table.HeadCell>
+              <Table.HeadCell>Supplier</Table.HeadCell>
               <Table.HeadCell>Delete</Table.HeadCell>
             </Table.Head>
             {users.map((user) => (
@@ -93,6 +111,27 @@ export default function DashUsers() {
                   <Table.Cell>{user.email}</Table.Cell>
                   <Table.Cell>
                     {user.isAdmin ? (
+                      <FaCheck className="text-green-500" />
+                    ) : (
+                      <FaTimes className="text-red-500" />
+                    )}
+                  </Table.Cell>
+                  <Table.Cell>
+                    {user.isManager ? (
+                      <FaCheck className="text-green-500" />
+                    ) : (
+                      <FaTimes className="text-red-500" />
+                    )}
+                  </Table.Cell>
+                  <Table.Cell>
+                    {user.isFinance ? (
+                      <FaCheck className="text-green-500" />
+                    ) : (
+                      <FaTimes className="text-red-500" />
+                    )}
+                  </Table.Cell>
+                  <Table.Cell>
+                    {user.isSupplier ? (
                       <FaCheck className="text-green-500" />
                     ) : (
                       <FaTimes className="text-red-500" />
@@ -140,9 +179,34 @@ export default function DashUsers() {
             </h3>
             <div className="flex justify-center gap-4">
               <Button color="failure" onClick={handleDeleteUser}>
-                Yes, I m sure
+                Yes, I'm sure
               </Button>
               <Button color="gray" onClick={() => setShowModal(false)}>
+                No, cancel
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
+      <Modal
+        show={showAddManagerModal}
+        onClose={() => setShowAddManagerModal(false)}
+        popup
+        size="md"
+      >
+        <Modal.Header>Add Manager</Modal.Header>
+        <Modal.Body>
+          <div className="text-center">
+            <HiOutlineExclamationCircle className="h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto" />
+            <h3 className="mb-5 text-lg text-gray-500 dark:text-gray-400">
+              Are you sure you want to add this user as a manager?
+            </h3>
+            <div className="flex justify-center gap-4">
+              <Button color="success">Yes, Add Manager</Button>
+              <Button
+                color="gray"
+                onClick={() => setShowAddManagerModal(false)}
+              >
                 No, cancel
               </Button>
             </div>
