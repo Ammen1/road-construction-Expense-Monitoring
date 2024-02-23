@@ -49,7 +49,7 @@ export default function ExpenseForm() {
   return (
     <div className="min-h-screen self-center ">
       <div className=" justify-center items-center ">
-        <div className="space-y-4 flex gap-9 ml-9">
+        <div className="space-y-4 flex gap-9 ">
           {expenses.map((income) => {
             const { _id, title, amount, category, type } = income;
             console.log(income);
@@ -58,7 +58,6 @@ export default function ExpenseForm() {
                 key={_id}
                 id={_id}
                 title={title}
-                // description={description}
                 amount={amount}
                 type={type}
                 category={category}

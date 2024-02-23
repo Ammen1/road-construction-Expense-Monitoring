@@ -10,10 +10,10 @@ function Expenses() {
     getExpenses();
   }, []);
   return (
-    <div className="  ">
-      <Card className=" text-center leading-7 bg-gradient-to-r from-indigo-900 via-purple-900 to-pink-900 ">
-        <h1>Expenses</h1>
-        <h2 className="">
+    <div className=" table-auto overflow-x-scroll md:mx-auto border-emerald-100 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500 ">
+      <Card className=" text-center leading-7 bg-gradient-to-r from-indigo-900 via-purple-900 to-pink-900  ">
+        <h1 className=" text-white">Expenses</h1>
+        <h2 className="text-white">
           Total Expense: <span>${totalExpenses()}</span>
         </h2>
       </Card>
