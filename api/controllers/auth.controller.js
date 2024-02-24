@@ -14,6 +14,7 @@ export const signup = async (req, res, next) => {
     isManager,
     isSupplier,
     isFinance,
+    isEmployee,
   } = req.body;
 
   if (
@@ -29,17 +30,31 @@ export const signup = async (req, res, next) => {
 
   const hashedPassword = bcryptjs.hashSync(password, 10);
 
-  const newUser = new User({
-    username,
-    email,
-    password: hashedPassword,
-    tin,
-    city,
-    isAdmin,
-    isManager,
-    isSupplier,
-    isFinance,
-  });
+  let newUser;
+
+  if (isSupplier) {
+    // If the user is a supplier, include tin and city fields
+    newUser = new User({
+      username,
+      email,
+      password: hashedPassword,
+      tin,
+      city,
+      isSupplier,
+    });
+  } else {
+    // If the user is not a supplier, exclude tin and city fields
+    newUser = new User({
+      username,
+      email,
+      password: hashedPassword,
+      isSupplier,
+      isFinance,
+      isEmployee,
+      isAdmin,
+      isManager,
+    });
+  }
 
   try {
     await newUser.save();
