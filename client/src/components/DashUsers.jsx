@@ -92,6 +92,7 @@ export default function DashUsers() {
               <Table.HeadCell>Manager</Table.HeadCell>
               <Table.HeadCell>Finance</Table.HeadCell>
               <Table.HeadCell>Supplier</Table.HeadCell>
+              <Table.HeadCell>Employee</Table.HeadCell>
               <Table.HeadCell>Delete</Table.HeadCell>
             </Table.Head>
             {users.map((user) => (
@@ -132,6 +133,13 @@ export default function DashUsers() {
                   </Table.Cell>
                   <Table.Cell>
                     {user.isSupplier ? (
+                      <FaCheck className="text-green-500" />
+                    ) : (
+                      <FaTimes className="text-red-500" />
+                    )}
+                  </Table.Cell>
+                  <Table.Cell>
+                    {user.isEmployee ? (
                       <FaCheck className="text-green-500" />
                     ) : (
                       <FaTimes className="text-red-500" />
@@ -193,26 +201,7 @@ export default function DashUsers() {
         onClose={() => setShowAddManagerModal(false)}
         popup
         size="md"
-      >
-        <Modal.Header>Add Manager</Modal.Header>
-        <Modal.Body>
-          <div className="text-center">
-            <HiOutlineExclamationCircle className="h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto" />
-            <h3 className="mb-5 text-lg text-gray-500 dark:text-gray-400">
-              Are you sure you want to add this user as a manager?
-            </h3>
-            <div className="flex justify-center gap-4">
-              <Button color="success">Yes, Add Manager</Button>
-              <Button
-                color="gray"
-                onClick={() => setShowAddManagerModal(false)}
-              >
-                No, cancel
-              </Button>
-            </div>
-          </div>
-        </Modal.Body>
-      </Modal>
+      ></Modal>
     </div>
   );
 }
