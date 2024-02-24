@@ -42,18 +42,27 @@ export default function AddUsers() {
         formData.isManager = true;
         formData.isSupplier = false;
         formData.isFinancer = false;
+        formData.isEmployee = false;
       } else if (formData.role === "Supplier") {
         formData.isSupplier = true;
         formData.isManager = false;
         formData.isFinance = false;
+        formData.isEmployee = false;
       } else if (formData.role === "Finance") {
         formData.isFinance = true;
         formData.isManager = false;
         formData.isSupplier = false;
+        formData.isEmployee = false;
+      } else if (formData.role === "Employee") {
+        formData.isFinance = false;
+        formData.isManager = false;
+        formData.isSupplier = false;
+        formData.isEmployee = true;
       } else {
         formData.isManager = false;
         formData.isSupplier = false;
         formData.isFinance = false;
+        formData.isEmployee = false;
       }
 
       const res = await fetch("/api/auth/signup", {
@@ -110,7 +119,7 @@ export default function AddUsers() {
               <Label value="Your email" />
               <TextInput
                 type="email"
-                placeholder="name@company.com"
+                placeholder="amen@amen.com"
                 id="email"
                 onChange={handleChange}
               />
@@ -136,6 +145,7 @@ export default function AddUsers() {
               <option value="Manager">isManager</option>
               <option value="Supplier">isSupplier</option>
               <option value="Finance">isFinance</option>
+              <option value="Employee">isEmployee</option>
             </select>
             <Button
               gradientDuoTone="purpleToPink"
