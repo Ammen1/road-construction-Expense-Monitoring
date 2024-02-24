@@ -12,14 +12,6 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    tin: {
-      type: String,
-      require: false,
-    },
-    city: {
-      type: String,
-      require: false,
-    },
     password: {
       type: String,
       required: true,
@@ -39,6 +31,22 @@ const userSchema = new mongoose.Schema(
     isSupplier: {
       type: Boolean,
       default: false,
+    },
+    isEmployee: {
+      type: Boolean,
+      default: false,
+    },
+    tin: {
+      type: String,
+      required: function () {
+        return this.isSupplier === true;
+      },
+    },
+    city: {
+      type: String,
+      required: function () {
+        return this.isSupplier === true;
+      },
     },
   },
   { timestamps: true }
