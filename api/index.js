@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import authRoutes from "./routes/auth.route.js";
 import userRoutes from "./routes/user.route.js";
 import expense from "./routes/expense.route.js";
+import project from "./routes/project.route.js";
 import cors from "cors";
 
 import cookieParser from "cookie-parser";
@@ -35,6 +36,7 @@ app.listen(3000, () => {
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/expense", expense);
+app.use("/api/project", project);
 
 app.use(express.static(path.join(__dirname, "/client/dist")));
 
