@@ -4,13 +4,18 @@ import { Button, Label, TextInput, Select } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { Datepicker } from "flowbite-react";
 
 export default function CreateProject() {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    budget: "",
+    budget: {
+      materials: "",
+      labor: "",
+      equipment: "",
+      permits: "",
+      other: "",
+    },
     startDate: "",
     endDate: "",
     location: "",
@@ -86,7 +91,7 @@ export default function CreateProject() {
 
       console.log("Project Data:", projectDataWithManager);
 
-      const res = await fetch("/api/create/projects", {
+      const res = await fetch("/api/project/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -111,7 +116,7 @@ export default function CreateProject() {
   };
 
   return (
-    <div className="min-h-screen mt-20">
+    <div className="min-h-screen mt-20 lg:mr-44">
       <div className="flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-5">
         {/* left */}
         <div className="flex-1 lg:mb-44 ">
@@ -151,20 +156,6 @@ export default function CreateProject() {
                   setFormData({ ...formData, description: e.target.value })
                 }
               />
-              <Label value="budget" />
-              <TextInput
-                type="number"
-                placeholder="budget"
-                required
-                id="budget"
-                value={formData.budget}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    budget: parseFloat(e.target.value),
-                  })
-                }
-              />
               <Label value="lacation" />
               <TextInput
                 type="text"
@@ -173,11 +164,62 @@ export default function CreateProject() {
                 id="lacation"
                 value={formData.location}
                 onChange={(e) =>
-                  setFormData({ ...formData, startDate: e.target.value })
+                  setFormData({ ...formData, location: e.target.value })
+                }
+              />
+              equipment
+              <Label value="badget-equipment" />
+              <TextInput
+                type="number"
+                placeholder="equipment"
+                id="equipment"
+                value={formData.budget.equipment}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    budget: {
+                      ...formData.budget,
+                      equipment: parseFloat(e.target.value),
+                    },
+                  })
+                }
+              />
+              <Label value="budget - Materials" />
+              <TextInput
+                type="number"
+                placeholder="materials"
+                required
+                id="materials"
+                value={formData.budget.materials}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    budget: {
+                      ...formData.budget,
+                      materials: parseFloat(e.target.value),
+                    },
+                  })
+                }
+              />
+              <Label value="budget - Labor" />
+              <TextInput
+                type="number"
+                placeholder="Labor"
+                required
+                id="labor"
+                value={formData.budget.labor}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    budget: {
+                      ...formData.budget,
+                      labor: parseFloat(e.target.value),
+                    },
+                  })
                 }
               />
               <Label value="start date" />
-              <Datepicker
+              <TextInput
                 type="date"
                 placeholder="start date"
                 required
@@ -188,10 +230,9 @@ export default function CreateProject() {
                 }
               />
               <Label value="To end date" />
-              <Datepicker
+              <TextInput
                 type="date"
                 placeholder="end date"
-                lang="am ET"
                 required
                 id="endDate"
                 value={formData.endDate}
@@ -229,6 +270,7 @@ export default function CreateProject() {
                     handleTaskChange(index, "name", e.target.value)
                   }
                 />
+                <Label value="description" />
                 <TextInput
                   type="text"
                   placeholder="description"
@@ -237,6 +279,7 @@ export default function CreateProject() {
                     handleTaskChange(index, "description", e.target.value)
                   }
                 />
+                <Label value="date" />
                 <TextInput
                   type="date"
                   placeholder="due date"

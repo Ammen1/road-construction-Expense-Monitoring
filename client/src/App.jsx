@@ -6,6 +6,9 @@ import SignUp from "./pages/SignUp";
 import Header from "./components/Header";
 import Dashboard from "./pages/Dashboard";
 import Expenses from "./components/Expenses";
+import AddUsers from "./pages/ManageUsers";
+import CreatePost from "./pages/CreateProjects";
+import Footer from "./components/Footer";
 
 export default function App() {
   return (
@@ -18,7 +21,10 @@ export default function App() {
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/create-expense" element={<Expenses />} />
+        <Route path="/add-users" element={<AddUsers />} />
+        <Route path="/create-post" element={<CreatePost />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 }
