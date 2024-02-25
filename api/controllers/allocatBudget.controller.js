@@ -1,6 +1,6 @@
 import Project from "../models/allocateBudget.model.js";
 
-const createProject = async (req, res) => {
+export const createProject = async (req, res) => {
   try {
     const {
       name,
@@ -168,5 +168,3 @@ export const updateproject = async (req, res, next) => {
     next(error);
   }
 };
-
-export default createProject;
