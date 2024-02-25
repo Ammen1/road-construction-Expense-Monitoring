@@ -19,14 +19,16 @@ export default function DashUsers() {
       try {
         const res = await fetch(`/api/user/getusers`);
         const data = await res.json();
+        console.log("Fetch Users Response:", data);
         if (res.ok) {
+          console.log("Fetched Users:", data.users);
           setUsers(data.users);
           if (data.users.length < 9) {
             setShowMore(false);
           }
         }
       } catch (error) {
-        console.log(error.message);
+        console.error("Fetch Users Error:", error.message);
       }
     };
     if (currentUser.isAdmin) {
