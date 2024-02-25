@@ -167,8 +167,7 @@ export default function CreateProject() {
                   setFormData({ ...formData, location: e.target.value })
                 }
               />
-              equipment
-              <Label value="badget-equipment" />
+              <Label value="badget for equipment" />
               <TextInput
                 type="number"
                 placeholder="equipment"
@@ -184,7 +183,7 @@ export default function CreateProject() {
                   })
                 }
               />
-              <Label value="budget - Materials" />
+              <Label value="budget for materials" />
               <TextInput
                 type="number"
                 placeholder="materials"
@@ -201,11 +200,10 @@ export default function CreateProject() {
                   })
                 }
               />
-              <Label value="budget - Labor" />
+              <Label value="budget for labor" />
               <TextInput
                 type="number"
                 placeholder="Labor"
-                required
                 id="labor"
                 value={formData.budget.labor}
                 onChange={(e) =>
