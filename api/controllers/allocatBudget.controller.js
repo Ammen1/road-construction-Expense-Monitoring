@@ -76,12 +76,11 @@ export const createProject = async (req, res) => {
 
 export const getProjects = async (req, res, next) => {
   try {
-    const user = await Project.find();
-    if (!user) {
+    const projects = await Project.find();
+    if (!projects) {
       return next(errorHandler(404, "Projects not found"));
     }
-    const { password, ...rest } = user._doc;
-    res.status(200).json(rest);
+    res.status(200).json({ projects }); // Wrap projects in an object
   } catch (error) {
     next(error);
   }
