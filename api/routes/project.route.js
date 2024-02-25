@@ -10,8 +10,6 @@ import { verifyToken } from "../utils/verifyUser.js";
 
 const router = express.Router();
 
-// Route to create a new project
-
 router.post("/create", verifyToken, createProject);
 router.get("/getprojects", getProjects);
 router.get("/getproject", getProject);
