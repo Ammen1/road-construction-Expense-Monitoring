@@ -9,6 +9,7 @@ import Expenses from "./components/Expenses";
 import AddUsers from "./pages/ManageUsers";
 import CreatePost from "./pages/CreateProjects";
 import Footer from "./components/Footer";
+import UpdatePost from "./pages/UpdatePost";
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
         <Route path="/create-expense" element={<Expenses />} />
         <Route path="/add-users" element={<AddUsers />} />
         <Route path="/create-post" element={<CreatePost />} />
+        <Route path="/update-post/:projectId" element={<UpdatePost />} />
       </Routes>
       <Footer />
     </BrowserRouter>
