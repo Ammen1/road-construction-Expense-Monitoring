@@ -19,6 +19,7 @@ export default function CreateProject() {
     startDate: "",
     endDate: "",
     location: "",
+    employee: "",
     tasks: [
       {
         name: "",
@@ -32,6 +33,8 @@ export default function CreateProject() {
   const [publishError, setPublishError] = useState(null);
   const [availableManagers, setAvailableManagers] = useState([]);
   const [selectedManager, setSelectedManager] = useState(null);
+  const [availableEmployees, setAvailableEmployees] = useState([]);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
 
   const navigate = useNavigate();
 
@@ -49,6 +52,22 @@ export default function CreateProject() {
       }
     };
     getManagers();
+  }, []);
+  const getEmployees = async () => {
+    try {
+      const res = await fetch("/api/user/getusers");
+      const data = await res.json();
+      if (res.ok) {
+        const employees = data.users.filter((user) => user.isEmployee);
+        setAvailableEmployees(employees);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  useEffect(() => {
+    getEmployees();
   }, []);
 
   const handleTaskChange = (index, field, value) => {
@@ -86,6 +105,7 @@ export default function CreateProject() {
       const projectDataWithManager = {
         ...formData,
         manager: selectedManager,
+        employee: selectedEmployee,
         tasks: validTasks,
       };
 
@@ -108,7 +128,7 @@ export default function CreateProject() {
       }
 
       setPublishError(null);
-      navigate(`/`);
+      navigate(`/dashboard?tab=projects`);
     } catch (error) {
       console.error("Error:", error);
       setPublishError("Something went wrong");
@@ -239,12 +259,13 @@ export default function CreateProject() {
                 }
               />
             </div>
+
             <Label value="manager" />
             <Select
               className="text-white"
               label="select manager"
               id="manager"
-              value={selectedManager}
+              value={selectedManager || ""}
               onChange={(e) => setSelectedManager(e.target.value)}
             >
               <option value="" disabled>
@@ -253,6 +274,23 @@ export default function CreateProject() {
               {availableManagers.map((manager) => (
                 <option key={manager._id} value={manager._id}>
                   {manager.username}
+                </option>
+              ))}
+            </Select>
+            <Label value="employee" />
+            <Select
+              className="text-white"
+              label="select employee"
+              id="employee"
+              value={selectedEmployee || ""}
+              onChange={(e) => setSelectedEmployee(e.target.value)}
+            >
+              <option value="" disabled>
+                Choose an Employee
+              </option>
+              {availableEmployees.map((employee) => (
+                <option key={employee._id} value={employee._id}>
+                  {employee.username}
                 </option>
               ))}
             </Select>
@@ -292,15 +330,12 @@ export default function CreateProject() {
                 </Button>
               </div>
             ))}
-
             <Button type="button" onClick={addTask}>
               Add Task
             </Button>
-
             <Button type="submit" gradientDuoTone="purpleToPink">
               Publish
             </Button>
-
             {publishError && <p className="text-red-500">{publishError}</p>}
           </form>
         </div>
