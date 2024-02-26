@@ -14,6 +14,6 @@ router.post("/create", verifyToken, createProject);
 router.get("/getprojects", getProjects);
 router.get("/getproject", getProject);
 router.delete("/deleteproject/:projectId/:userId", verifyToken, deleteproject);
-router.put("/updateproject/:postId/:userId", verifyToken, updateproject);
+router.put("/updateproject/:projectId/:userId", verifyToken, updateproject);
 
 export default router;
