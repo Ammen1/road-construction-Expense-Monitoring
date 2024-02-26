@@ -85,19 +85,19 @@ export default function UpdatePost() {
       );
       const projectDataWithManager = {
         ...formData,
-        manager: selectedManager,
+        manager: { _id: selectedManager },
         tasks: validTasks,
       };
 
       console.log("Project Data:", projectDataWithManager);
       const res = await fetch(
-        `/api/project/updateproject/${formData._id}/${currentUser._id}`,
+        `/api/project/updateproject/${projectId}/${currentUser._id}`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify(projectDataWithManager),
         }
       );
       const data = await res.json();
@@ -142,7 +142,7 @@ export default function UpdatePost() {
   };
 
   return (
-    <div className="min-h-screen mt-20 lg:mr-44">
+    <div className="min-h-screen mt-20 lg:mr-44 text-white">
       <div className="flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-5">
         {/* left */}
         <div className="flex-1 lg:mb-44 ">
@@ -182,18 +182,18 @@ export default function UpdatePost() {
                   setFormData({ ...formData, description: e.target.value })
                 }
               />
-              {/* <Label value="lacation" />
+              <Label value="location" />
               <TextInput
                 type="text"
                 placeholder="location"
                 required
-                id="lacation"
+                id="location"
                 value={formData.location}
                 onChange={(e) =>
                   setFormData({ ...formData, location: e.target.value })
                 }
-              /> */}
-              <Label value="badget for equipment" />
+              />
+              <Label value="budget for equipment" />
               <TextInput
                 type="number"
                 placeholder="equipment"
@@ -242,7 +242,7 @@ export default function UpdatePost() {
                   })
                 }
               />
-              {/* <Label value="To end date" />
+              <Label value="end date" />
               <TextInput
                 type="date"
                 placeholder="end date"
@@ -252,14 +252,14 @@ export default function UpdatePost() {
                 onChange={(e) =>
                   setFormData({ ...formData, endDate: e.target.value })
                 }
-              /> */}
+              />
             </div>
             <Label value="manager" />
             <Select
               className="text-white"
               label="select manager"
               id="manager"
-              value={selectedManager}
+              value={selectedManager || ""}
               onChange={(e) => setSelectedManager(e.target.value)}
             >
               <option value="" disabled>
@@ -271,6 +271,7 @@ export default function UpdatePost() {
                 </option>
               ))}
             </Select>
+
             {formData.tasks.map((task, index) => (
               <div key={index} className="flex flex-col gap-4">
                 <Label value="task" />
@@ -292,7 +293,7 @@ export default function UpdatePost() {
                     handleTaskChange(index, "description", e.target.value)
                   }
                 />
-                {/* <Label value="date" />
+                <Label value="date" />
                 <TextInput
                   type="date"
                   placeholder="due date"
@@ -300,7 +301,7 @@ export default function UpdatePost() {
                   onChange={(e) =>
                     handleTaskChange(index, "dueDate", e.target.value)
                   }
-                /> */}
+                />
 
                 <Button type="button" onClick={() => removeTask(index)}>
                   Remove Task
