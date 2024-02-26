@@ -1,5 +1,6 @@
 import Project from "../models/allocateBudget.model.js";
 import { errorHandler } from "../utils/error.js";
+import mongoose from "mongoose";
 
 export const createProject = async (req, res) => {
   try {
@@ -9,12 +10,17 @@ export const createProject = async (req, res) => {
       startDate,
       endDate,
       manager,
+      employee,
       budget,
       tasks,
       location,
     } = req.body;
 
-    if (!name || !startDate || !endDate || !budget || !manager) {
+    if (!mongoose.Types.ObjectId.isValid(employee)) {
+      return res.status(400).json({ error: "Invalid employee ID" });
+    }
+
+    if (!name || !startDate || !endDate || !budget) {
       return next(errorHandler(400, "Please provide all required fields"));
     }
 
@@ -44,6 +50,7 @@ export const createProject = async (req, res) => {
       startDate,
       endDate,
       manager,
+      employee,
       budget,
       tasks,
       location,
@@ -146,23 +153,14 @@ export const updateproject = async (req, res, next) => {
           location: req.body.location,
           budget: req.body.budget,
           description: req.body.description,
-          tasks: req.body.tasks,
           manager: req.body.manager,
-          endDate: req.body.endDate,
+          employee: req.body.employee,
         },
       },
       { new: true }
     );
-
-    console.log("Updated Project:", updatedProject); // Add this line
-
-    if (!updatedProject) {
-      return res.status(404).json({ message: "Project not found" });
-    }
-
     res.status(200).json(updatedProject);
   } catch (error) {
-    console.error("Error updating project:", error); // Add this line
     next(error);
   }
 };
