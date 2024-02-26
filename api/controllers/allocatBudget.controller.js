@@ -143,18 +143,26 @@ export const updateproject = async (req, res, next) => {
       {
         $set: {
           name: req.body.name,
-          location: req.body.locatin,
+          location: req.body.location,
           budget: req.body.budget,
           description: req.body.description,
-          // tasks: req.body.tasks,
-          manager: req.body.isManager,
-          // endDate: req.body.endDate,
+          tasks: req.body.tasks,
+          manager: req.body.manager,
+          endDate: req.body.endDate,
         },
       },
       { new: true }
     );
+
+    console.log("Updated Project:", updatedProject); // Add this line
+
+    if (!updatedProject) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+
     res.status(200).json(updatedProject);
   } catch (error) {
+    console.error("Error updating project:", error); // Add this line
     next(error);
   }
 };
