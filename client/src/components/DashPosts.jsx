@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
-import Project from "../../../api/models/allocateBudget.model";
 
 export default function DashPosts() {
   const { currentUser } = useSelector((state) => state.user);
@@ -12,6 +11,8 @@ export default function DashPosts() {
   const [showModal, setShowModal] = useState(false);
   const [projectIdToDelete, setProjectIdToDelete] = useState("");
   const [availableManagers, setAvailableManagers] = useState([]);
+  const [availableEmployees, setAvailableEmployees] = useState([]);
+  // const [selectedEmployee, setSelectedEmployee] = useState(null);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -30,6 +31,22 @@ export default function DashPosts() {
       }
     };
     getManagers();
+  }, []);
+  const getEmployees = async () => {
+    try {
+      const res = await fetch("/api/user/getusers");
+      const data = await res.json();
+      if (res.ok) {
+        const employees = data.users.filter((user) => user.isEmployee);
+        setAvailableEmployees(employees);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  useEffect(() => {
+    getEmployees();
   }, []);
 
   useEffect(() => {
@@ -110,17 +127,25 @@ export default function DashPosts() {
   };
 
   return (
-    <div className="table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
+    <div className="table-auto max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
+      {currentUser.isAdmin && (
+        <Link to={"/create-post"}>
+          <Button type="button" gradientDuoTone="purpleToPink" className="">
+            Create a Project
+          </Button>
+        </Link>
+      )}
       {loading && <p>Loading...</p>}
       {error && <p className="text-red-500">{error}</p>}
       {currentUser.isAdmin && userProjects.length > 0 ? (
         <>
-          <Table hoverable className="shadow-md ">
+          <Table hoverable className="shadow-md mt-6 w-full">
             <Table.Head>
               <Table.HeadCell>date updated</Table.HeadCell>
               <Table.HeadCell>project location</Table.HeadCell>
               <Table.HeadCell>budget</Table.HeadCell>
               <Table.HeadCell>project manager</Table.HeadCell>
+              <Table.HeadCell>project employee</Table.HeadCell>
               <Table.HeadCell>project name</Table.HeadCell>
               <Table.HeadCell>start date</Table.HeadCell>
               <Table.HeadCell>end date</Table.HeadCell>
@@ -147,21 +172,19 @@ export default function DashPosts() {
                     </Link>
                   </Table.Cell>
                   <Table.Cell>
-                    <ul>
-                      {/* <li>Materials: {project.budget.materials}</li>
-                      <li>Labor: {project.budget.labor}</li>
-                      <li>Equipment: {project.budget.equipment}</li>
-                      <li>Permits: {project.budget.permits}</li> */}
-
-                      <li>
-                        Total Budget: {calculateTotalBudget(project.budget)}
-                      </li>
-                    </ul>
+                    Total Budget: {calculateTotalBudget(project.budget)}
                   </Table.Cell>
                   <Table.Cell>
                     {
                       availableManagers.find(
                         (manager) => manager._id === project.manager
+                      )?.username
+                    }
+                  </Table.Cell>
+                  <Table.Cell>
+                    {
+                      availableEmployees.find(
+                        (employee) => employee._id === project.employee
                       )?.username
                     }
                   </Table.Cell>
