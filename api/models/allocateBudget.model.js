@@ -18,6 +18,10 @@ const projectSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+  employee: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
   status: {
     type: String,
     enum: ["Pending", "InProgress", "Completed"],
