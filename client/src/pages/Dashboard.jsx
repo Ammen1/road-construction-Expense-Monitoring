@@ -6,6 +6,7 @@ import DashPosts from "../components/DashPosts";
 import DashUsers from "../components/DashUsers";
 import DashboardComp from "../components/DashboardComp";
 import Expenses from "../components/Expenses";
+import CreateProject from "./CreateProjects";
 
 export default function Dashboard() {
   const location = useLocation();
@@ -32,6 +33,7 @@ export default function Dashboard() {
       {/* dashboard comp */}
       {tab === "dash" && <DashboardComp />}
       {tab === "create-expense" && <Expenses />}
+      {tab === "create-proejct" && <CreateProject />}
     </div>
   );
 }
