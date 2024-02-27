@@ -10,6 +10,8 @@ import AddUsers from "./pages/ManageUsers";
 import CreatePost from "./pages/CreateProjects";
 import Footer from "./components/Footer";
 import UpdatePost from "./pages/UpdatePost";
+import OnlyAdminPrivateRoute from "./components/OnlyAdminPrivateRoute";
+import PrivateRoute from "./components/PrivateRoute";
 
 export default function App() {
   return (
@@ -23,8 +25,13 @@ export default function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/create-expense" element={<Expenses />} />
         <Route path="/add-users" element={<AddUsers />} />
-        <Route path="/create-post" element={<CreatePost />} />
-        <Route path="/update-post/:projectId" element={<UpdatePost />} />
+        <Route element={<PrivateRoute />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
+        <Route element={<OnlyAdminPrivateRoute />}>
+          <Route path="/create-project" element={<CreatePost />} />
+          <Route path="/update-post/:projectId" element={<UpdatePost />} />
+        </Route>
       </Routes>
       <Footer />
     </BrowserRouter>
