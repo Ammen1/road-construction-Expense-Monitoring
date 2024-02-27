@@ -7,6 +7,10 @@ import {
   getProject,
 } from "../controllers/allocatBudget.controller.js";
 import { verifyToken } from "../utils/verifyUser.js";
+import {
+  applyForProject,
+  manageSupplierApplication,
+} from "../controllers/project.controller.js";
 
 const router = express.Router();
 
@@ -15,5 +19,10 @@ router.get("/getprojects", getProjects);
 router.get("/getproject", getProject);
 router.delete("/deleteproject/:projectId/:userId", verifyToken, deleteproject);
 router.put("/updateproject/:projectId/:userId", verifyToken, updateproject);
+router.post("/projects/:projectId/apply", applyForProject);
+router.patch(
+  "/projects/:projectId/suppliers/:userId",
+  manageSupplierApplication
+);
 
 export default router;
