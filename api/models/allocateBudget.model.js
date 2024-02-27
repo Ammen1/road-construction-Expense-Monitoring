@@ -34,6 +34,14 @@ const projectSchema = new mongoose.Schema({
     permits: { type: Number, default: 0 },
     other: { type: Number, default: 0 },
   },
+
+  supplierApplications: [
+    {
+      name: { type: String, required: false },
+      tin: { type: String, required: false },
+      city: { type: String, require: false },
+    },
+  ],
   tasks: [
     {
       name: { type: String, required: true },
