@@ -12,7 +12,6 @@ export default function DashPosts() {
   const [projectIdToDelete, setProjectIdToDelete] = useState("");
   const [availableManagers, setAvailableManagers] = useState([]);
   const [availableEmployees, setAvailableEmployees] = useState([]);
-  // const [selectedEmployee, setSelectedEmployee] = useState(null);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -127,9 +126,9 @@ export default function DashPosts() {
   };
 
   return (
-    <div className="table-auto max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
+    <div className="table-auto  max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
       {currentUser.isAdmin && (
-        <Link to={"/create-post"}>
+        <Link to={"/dashboard?tab=create-proejct"}>
           <Button type="button" gradientDuoTone="purpleToPink" className="">
             Create a Project
           </Button>
