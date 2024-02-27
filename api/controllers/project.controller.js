@@ -60,7 +60,7 @@ export const manageSupplierApplication = async (req, res) => {
     }
 
     const applicationIndex = project.supplierApplications.findIndex(
-      (app) => app.user.toString() === userId
+      (app) => app.user && app.user.toString() === userId
     );
 
     if (applicationIndex === -1) {
