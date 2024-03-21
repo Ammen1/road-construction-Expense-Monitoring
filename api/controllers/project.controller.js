@@ -52,12 +52,12 @@ export const manageSupplierApplication = async (req, res) => {
       return res.status(404).json({ message: "Project not found" });
     }
 
-    const requestingUser = await User.findById(req.user._id);
-    if (!requestingUser.isAdmin) {
-      return res
-        .status(403)
-        .json({ message: "Only admins can manage supplier applications" });
-    }
+    // const requestingUser = await User.findById(req.user._id);
+    // if (!requestingUser.isAdmin) {
+    //   return res
+    //     .status(403)
+    //     .json({ message: "Only admins can manage supplier applications" });
+    // }
 
     const applicationIndex = project.supplierApplications.findIndex(
       (app) => app.user && app.user.toString() === userId
