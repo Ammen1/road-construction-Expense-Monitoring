@@ -1,6 +1,7 @@
 import bcryptjs from "bcryptjs";
 import { errorHandler } from "../utils/error.js";
 import User from "../models/user.model.js";
+import Notice from "../models/notification.js";
 
 export const updateUser = async (req, res, next) => {
   if (req.user.id !== req.params.userId) {
@@ -138,5 +139,22 @@ export const getManagers = async (req, res, next) => {
     res.status(200).json(rest);
   } catch (error) {
     next(error);
+  }
+};
+
+
+export const getNotificationsList = async (req, res) => {
+  try {
+    const { userId } = req.user;
+
+    const notice = await Notice.findOne({
+      team: userId,
+      isRead: { $nin: [userId] },
+    }).populate("task", "title");
+
+    res.status(201).json(notice);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ status: false, message: error.message });
   }
 };

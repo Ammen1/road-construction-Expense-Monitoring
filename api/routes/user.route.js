@@ -6,6 +6,7 @@ import {
   signout,
   updateUser,
   getManagers,
+  getNotificationsList
 } from "../controllers/user.controller.js";
 import { verifyToken } from "../utils/verifyUser.js";
 
@@ -17,5 +18,6 @@ router.post("/signout", signout);
 router.get("/getusers", verifyToken, getUsers);
 router.get("/:userId", getUser);
 router.get("/:getmanagers", getManagers);
+router.get("/notifications", getNotificationsList);
 
 export default router;
