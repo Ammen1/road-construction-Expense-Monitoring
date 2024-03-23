@@ -7,6 +7,10 @@ import DashUsers from "../components/DashUsers";
 import DashboardComp from "../components/DashboardComp";
 import Expenses from "../components/Expenses";
 import CreateProject from "./CreateProjects";
+import Tasks from "../components/Tasks";
+import CreateTask from "./CreateTask";
+import DashProjectManager from "../components/DashProjectManager";
+import Income from "../components/Income";
 
 export default function Dashboard() {
   const location = useLocation();
@@ -33,7 +37,11 @@ export default function Dashboard() {
       {/* dashboard comp */}
       {tab === "dash" && <DashboardComp />}
       {tab === "create-expense" && <Expenses />}
+      {tab === "create-budget" && <Income />}
       {tab === "create-proejct" && <CreateProject />}
+      {tab === "create-task" && <CreateTask />}
+      {tab === "tasks" && <Tasks />}
+      {tab === "project" && <DashProjectManager />}
     </div>
   );
 }
