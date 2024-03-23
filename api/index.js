@@ -6,10 +6,12 @@ import userRoutes from "./routes/user.route.js";
 import expense from "./routes/expense.route.js";
 import project from "./routes/project.route.js";
 import taskRoutes from "./routes/taskRoutes.js"
+import supplier from "./routes/supplierRouter.js"
 import cors from "cors";
 
 import cookieParser from "cookie-parser";
 import path from "path";
+import Supplier from "./models/supplier.model.js";
 
 dotenv.config();
 
@@ -39,6 +41,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/expense", expense);
 app.use("/api/project", project);
 app.use("/api/task", taskRoutes);
+app.use("/api/supplier", supplier)
 
 app.use(express.static(path.join(__dirname, "/client/dist")));
 
