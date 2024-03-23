@@ -1,5 +1,3 @@
-// react/components/CreateProject.js
-
 import { Button, Label, TextInput, Select } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -9,13 +7,7 @@ export default function CreateProject() {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    budget: {
-      materials: "",
-      labor: "",
-      equipment: "",
-      permits: "",
-      other: "",
-    },
+    status: "",
     startDate: "",
     endDate: "",
     location: "",
@@ -188,55 +180,6 @@ export default function CreateProject() {
                   setFormData({ ...formData, location: e.target.value })
                 }
               />
-              <Label value="badget for equipment" />
-              <TextInput
-                type="number"
-                placeholder="equipment"
-                id="equipment"
-                value={formData.budget.equipment}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    budget: {
-                      ...formData.budget,
-                      equipment: parseFloat(e.target.value),
-                    },
-                  })
-                }
-              />
-              <Label value="budget for materials" />
-              <TextInput
-                type="number"
-                placeholder="materials"
-                required
-                id="materials"
-                value={formData.budget.materials}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    budget: {
-                      ...formData.budget,
-                      materials: parseFloat(e.target.value),
-                    },
-                  })
-                }
-              />
-              <Label value="budget for labor" />
-              <TextInput
-                type="number"
-                placeholder="Labor"
-                id="labor"
-                value={formData.budget.labor}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    budget: {
-                      ...formData.budget,
-                      labor: parseFloat(e.target.value),
-                    },
-                  })
-                }
-              />
               <Label value="start date" />
               <TextInput
                 type="date"
@@ -259,6 +202,21 @@ export default function CreateProject() {
                   setFormData({ ...formData, endDate: e.target.value })
                 }
               />
+            <Label value="status" />
+            <Select
+            type="text"
+            className="text-white"
+            id="status"
+            value={formData.status}
+            onChange={(e) =>
+              setFormData({ ...formData, status: e.target.value })
+            }
+            >
+              <option value="Pending">Pending</option>
+              <option value="InProgress">InProgress</option>
+              <option value="Completed">Completed</option>
+            </Select>
+
             </div>
 
             <Label value="manager" />
