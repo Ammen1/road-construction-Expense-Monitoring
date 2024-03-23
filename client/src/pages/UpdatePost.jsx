@@ -10,14 +10,8 @@ export default function UpdatePost() {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    budget: {
-      materials: "",
-      labor: "",
-      equipment: "",
-      permits: "",
-      other: "",
-    },
-    // endDate: "",
+    status: "",
+    endDate: "",
     location: "",
     tasks: [
       {
@@ -159,7 +153,7 @@ export default function UpdatePost() {
         </div>
         <div className="flex-1">
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-            <div>
+            
               <Label value="name" />
               <TextInput
                 type="text"
@@ -193,55 +187,6 @@ export default function UpdatePost() {
                   setFormData({ ...formData, location: e.target.value })
                 }
               />
-              <Label value="budget for equipment" />
-              <TextInput
-                type="number"
-                placeholder="equipment"
-                id="equipment"
-                value={formData.budget.equipment}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    budget: {
-                      ...formData.budget,
-                      equipment: parseFloat(e.target.value),
-                    },
-                  })
-                }
-              />
-              <Label value="budget for materials" />
-              <TextInput
-                type="number"
-                placeholder="materials"
-                required
-                id="materials"
-                value={formData.budget.materials}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    budget: {
-                      ...formData.budget,
-                      materials: parseFloat(e.target.value),
-                    },
-                  })
-                }
-              />
-              <Label value="budget for labor" />
-              <TextInput
-                type="number"
-                placeholder="Labor"
-                id="labor"
-                value={formData.budget.labor}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    budget: {
-                      ...formData.budget,
-                      labor: parseFloat(e.target.value),
-                    },
-                  })
-                }
-              />
               <Label value="end date" />
               <TextInput
                 type="date"
@@ -253,7 +198,23 @@ export default function UpdatePost() {
                   setFormData({ ...formData, endDate: e.target.value })
                 }
               />
-            </div>
+                <Label value="status" />
+                <Select
+                type="text"
+                className="text-white"
+                id="status"
+                value={formData.status}
+                onChange={(e) =>
+                  setFormData((prevFormData) => ({
+                    ...prevFormData,
+                    status: e.target.value
+                  }))
+                }
+              >
+              <option value="Pending">Pending</option>
+              <option value="InProgress">InProgress</option>
+              <option value="Completed">Completed</option>
+            </Select>
             <Label value="manager" />
             <Select
               className="text-white"
