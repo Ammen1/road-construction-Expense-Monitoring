@@ -33,14 +33,6 @@ const projectSchema = new mongoose.Schema({
     default: "0",
 
   },
-
-  supplierApplications: [
-    {
-      name: { type: String, required: false },
-      tin: { type: String, required: false },
-      city: { type: String, require: false },
-    },
-  ],
   tasks: [
     {
       name: { type: String, required: true },
