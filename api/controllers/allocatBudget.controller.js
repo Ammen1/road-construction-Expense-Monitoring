@@ -11,7 +11,6 @@ export const createProject = async (req, res) => {
       endDate,
       manager,
       employee,
-      budget,
       tasks,
       location,
     } = req.body;
@@ -20,7 +19,7 @@ export const createProject = async (req, res) => {
       return res.status(400).json({ error: "Invalid employee ID" });
     }
 
-    if (!name || !startDate || !endDate || !budget) {
+    if (!name || !startDate || !endDate ) {
       return next(errorHandler(400, "Please provide all required fields"));
     }
 
@@ -30,12 +29,6 @@ export const createProject = async (req, res) => {
 
     if (!isNaN(name)) {
       return res.status(400).json({ error: "Name must not be a number" });
-    }
-
-    if (budget < 0) {
-      return res
-        .status(400)
-        .json({ error: "Budget must not be a negative number" });
     }
 
     if (new Date(startDate) > new Date(endDate)) {
@@ -51,7 +44,6 @@ export const createProject = async (req, res) => {
       endDate,
       manager,
       employee,
-      budget,
       tasks,
       location,
     });
@@ -74,6 +66,19 @@ export const createProject = async (req, res) => {
     }
   }
 };
+
+export const getProjectByManager = async (req, res, next) => {
+  try {
+    const managerId = req.params.userId;
+    const projects = await Project.find({ manager: managerId }).populate('manager');
+    res.json({ seccuss: true, projects });
+  } catch(error) {
+    console.error(" Error fetching  projects:", error);
+    res.status(500).json({ success: false, message: "Erro fetching projects"});
+  }
+};
+
+
 
 export const getProjects = async (req, res, next) => {
   try {
@@ -155,6 +160,7 @@ export const updateproject = async (req, res, next) => {
           description: req.body.description,
           manager: req.body.manager,
           employee: req.body.employee,
+          status: req.body.status,
         },
       },
       { new: true }
