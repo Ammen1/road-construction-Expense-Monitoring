@@ -1,11 +1,8 @@
 import mongoose from "mongoose";
+import Project from "./allocateBudget.model.js";
 
 const incomeSchema = new mongoose.Schema(
   {
-    userId: {
-      type: String,
-      required: true,
-    },
     amount: {
       type: Number,
       required: true,
@@ -26,15 +23,16 @@ const incomeSchema = new mongoose.Schema(
     description: {
       type: String,
       required: true,
-      maxLength: 20,
+      maxLength: 200,
       trim: true,
     },
-    type: {
-      type: String,
-      default: "income",
+    project: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Project", 
     },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Income", incomeSchema);
+const Income = mongoose.model("Income", incomeSchema);
+export default Income;

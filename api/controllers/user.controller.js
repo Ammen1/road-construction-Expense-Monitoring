@@ -75,9 +75,9 @@ export const signout = (req, res, next) => {
 };
 
 export const getUsers = async (req, res, next) => {
-  if (!req.user.isAdmin) {
-    return next(errorHandler(403, "You are not allowed to see all users"));
-  }
+  // if (!req.user.isAdmin) {
+  //   return next(errorHandler(403, "You are not allowed to see all users"));
+  // }
   try {
     const startIndex = parseInt(req.query.startIndex) || 0;
     const limit = parseInt(req.query.limit) || 9;
@@ -130,6 +130,18 @@ export const getUser = async (req, res, next) => {
 };
 
 export const getManagers = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.userId);
+    if (!user) {
+      return next(errorHandler(404, "User not found"));
+    }
+    const { password, ...rest } = user._doc;
+    res.status(200).json(rest);
+  } catch (error) {
+    next(error);
+  }
+};
+export const getEmployees = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.userId);
     if (!user) {

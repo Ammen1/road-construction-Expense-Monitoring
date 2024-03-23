@@ -4,8 +4,9 @@ import User from "../models/user.model.js";
 
 export const createTask = async (req, res) => {
   try {
+    const { userId } = req.body;
+
     const { title, team, stage, date, priority, assets } = req.body;
-    const userId = req.user._id; // Assuming userId is stored in req.user._id
 
     let text = "New task has been assigned to you";
     if (team?.length > 1) {
@@ -21,12 +22,12 @@ export const createTask = async (req, res) => {
     const activity = {
       type: "assigned",
       activity: text,
-      by: "" ,
+      by: userId,
     };
 
     const task = await Task.create({
       title,
-      team: "",
+      team,
       stage: stage.toLowerCase(),
       date,
       priority: priority.toLowerCase(),

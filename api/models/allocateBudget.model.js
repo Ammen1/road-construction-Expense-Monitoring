@@ -28,11 +28,10 @@ const projectSchema = new mongoose.Schema({
     default: "Pending",
   },
   budget: {
-    materials: { type: Number, default: 0 },
-    labor: { type: Number, default: 0 },
-    equipment: { type: Number, default: 0 },
-    permits: { type: Number, default: 0 },
-    other: { type: Number, default: 0 },
+    type: String,
+    required: true,
+    default: "0",
+
   },
 
   supplierApplications: [
@@ -46,27 +45,14 @@ const projectSchema = new mongoose.Schema({
     {
       name: { type: String, required: true },
       description: { type: String },
-      // assignedTo: {
-      //   type: mongoose.Schema.Types.ObjectId,
-      //   ref: "User",
-      //   validate: {
-      //     validator: async function (userId) {
-      //       // Check if the assigned user has the role "Employee"
-      //       const user = await mongoose.model("User").findById(userId);
-      //       return user && user.role === "Employee";
-      //     },
-      //     message: "Task must be assigned to a user with the role 'Employee'",
-      //   },
-      // },
       dueDate: {
         type: Date,
-        // validate: {
-        //   validator: function (dueDate) {
-        //     // Ensure that the due date is in the future
-        //     return dueDate > new Date();
-        //   },
-        //   message: "Due date must be in the future",
-        // },
+        validate: {
+          validator: function (dueDate) {
+            return dueDate > new Date();
+          },
+          message: "Due date must be in the future",
+        },
       },
       status: {
         type: String,

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+// import Project from "./allocateBudget.model";
 
 const ExpenseSchema = new mongoose.Schema(
   {
@@ -6,32 +7,36 @@ const ExpenseSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      maxLength: 50,
+      maxlength: 50,
     },
     amount: {
       type: Number,
       required: true,
-      maxLength: 20,
+      maxlength: 20,
       trim: true,
     },
     type: {
       type: String,
       default: "expense",
+      trim: true,
     },
     date: {
       type: Date,
-      trim: true,
-      default: "",
+      default: Date.now,
     },
     category: {
       type: String,
       required: true,
       trim: true,
     },
+    project: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Project",
+    },
     description: {
       type: String,
       required: true,
-      maxLength: 20,
+      maxlength: 200,
       trim: true,
     },
   },

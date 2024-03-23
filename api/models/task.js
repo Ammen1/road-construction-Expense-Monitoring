@@ -14,6 +14,7 @@ const taskSchema = new Schema(
       default: "todo",
       enum: ["todo", "in progress", "completed"],
     },
+    project: { type: Schema.Types.ObjectId, ref: "Project" },
     activities: {
       type: {
         type: String,
@@ -29,7 +30,7 @@ const taskSchema = new Schema(
       },
       activity: String,
       date: { type: Date, default: new Date() },
-      // by: { type: Schema.Types.ObjectId, ref: "User", default: "" },
+      by: { type: Schema.Types.ObjectId, ref: "User" },
     },
 
     subTasks: [
@@ -40,7 +41,7 @@ const taskSchema = new Schema(
       },
     ],
     assets: [String],
-    // team: [{ type: Schema.Types.ObjectId, ref: "User", default: "" }],
+    team: [{ type: Schema.Types.ObjectId, ref: "User" }],
     isTrashed: { type: Boolean, default: false },
   },
   { timestamps: true }
