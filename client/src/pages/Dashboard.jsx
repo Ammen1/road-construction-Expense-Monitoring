@@ -11,6 +11,11 @@ import Tasks from "../components/Tasks";
 import CreateTask from "./CreateTask";
 import DashProjectManager from "../components/DashProjectManager";
 import Income from "../components/Income";
+import ApproveSupplier from "../components/ApproveSupplier";
+import DashpproveSupplier from "../components/DashpproveSupplier";
+import DashMyApplication from "../components/DashMyApplication";
+import DashFinance from "../components/DashFinance";
+import DashTasks from "../components/DashTasks";
 
 export default function Dashboard() {
   const location = useLocation();
@@ -42,6 +47,11 @@ export default function Dashboard() {
       {tab === "create-task" && <CreateTask />}
       {tab === "tasks" && <Tasks />}
       {tab === "project" && <DashProjectManager />}
+      {tab === "approve" && <ApproveSupplier />}
+      {tab === "approve-supplier" && <DashpproveSupplier />}
+      {tab === "myapplication" && <DashMyApplication />}
+      {tab === "audit" && <DashFinance />}
+      {tab === "task" && <DashTasks />}
     </div>
   );
 }
