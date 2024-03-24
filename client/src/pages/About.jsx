@@ -1,12 +1,12 @@
 export default function About() {
   return (
-    <div className='min-h-screen flex items-center justify-center bg-gray-100'>
+    <div className='min-h-screen flex items-center justify-center dark:bg-black'>
       <div className='max-w-2xl mx-auto p-6 text-center'>
         <div>
           <h1 className='text-3xl font-semibold text-center my-7'>
             About Our Construction Company
           </h1>
-          <div className='text-md text-gray-700 flex flex-col gap-6'>
+          <div className='text-md text-gray-700 flex text-white flex-col gap-6'>
             <p>
               Welcome to our construction company's website! We're dedicated to
               delivering high-quality construction services tailored to meet
