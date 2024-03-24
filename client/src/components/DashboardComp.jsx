@@ -18,7 +18,7 @@ export default function DashboardComp() {
   const [lastMonthUsers, setLastMonthUsers] = useState(0);
   const [lastMonthProjects, setLastMonthProjects] = useState(0);
   const { currentUser } = useSelector((state) => state.user);
-  const { getExpenses, totalExpenses } = useGlobalContext();
+  const { getExpenses, totalBalance, totalIncome, totalExpenses } = useGlobalContext();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -76,21 +76,41 @@ export default function DashboardComp() {
             <div className="text-gray-500">Last month</div>
           </div>
         </div>
-
         {/* Expenses */}
+        <div className="flex flex-col p-3 dark:bg-slate-800 gap-4 md:w-72 w-full rounded-md shadow-md">
+        <div className="flex justify-between">
+          <div>
+            <h3 className="text-gray-500 text-md uppercase">Total Balance</h3>
+            <h2 className={`total-Expenses justify-center items-center ${totalBalance() < 0 ? 'text-red-500' : ''}`}>
+              <span>{totalBalance()}</span>
+            </h2>
+          </div>
+          <HiDocumentText className="bg-lime-600 text-white rounded-full text-5xl p-3 shadow-lg" />
+        </div>
+
+        </div>              
         <div className="flex flex-col p-3 dark:bg-slate-800 gap-4 md:w-72 w-full rounded-md shadow-md">
           <div className="flex justify-between">
             <div>
               <h3 className="text-gray-500 text-md uppercase">Total Expense</h3>
               <h2 className="total-Expenses justify-center items-center">
-                <span>${totalExpenses()}</span>
+                <span>{totalExpenses()}</span>
               </h2>
             </div>
             <HiDocumentText className="bg-lime-600 text-white rounded-full text-5xl p-3 shadow-lg" />
           </div>
         </div>
-
-        {/* Total Posts */}
+          <div className="flex flex-col p-3 dark:bg-slate-800 gap-4 md:w-72 w-full rounded-md shadow-md">
+          <div className="flex justify-between">
+            <div>
+              <h3 className="text-gray-500 text-md uppercase">Total Budget</h3>
+              <h2 className="total-Expenses justify-center items-center">
+                <span>{totalIncome()}</span>
+              </h2>
+            </div>
+            <HiDocumentText className="bg-lime-600 text-white rounded-full text-5xl p-3 shadow-lg" />
+          </div>
+        </div>
         <div className="flex flex-col p-3 dark:bg-slate-800 gap-4 md:w-72 w-full rounded-md shadow-md">
           <div className="flex justify-between">
             <div>
@@ -213,23 +233,7 @@ export default function DashboardComp() {
                   <Table.Cell>{project.name}</Table.Cell>
                   <div className="mt-4">
                     <h4 className="text-lg font-semibold mb-2">Budget:</h4>
-                    <ul className="list-disc pl-5">
-                      <li className="text-gray-600 dark:text-gray-400">
-                        Materials: {project.budget.materials}
-                      </li>
-                      <li className="text-gray-600 dark:text-gray-400">
-                        Labor: {project.budget.labor}
-                      </li>
-                      <li className="text-gray-600 dark:text-gray-400">
-                        Equipment: {project.budget.equipment}
-                      </li>
-                      <li className="text-gray-600 dark:text-gray-400">
-                        Permits: {project.budget.permits}
-                      </li>
-                      <li className="text-gray-600 dark:text-gray-400">
-                        Other: {project.budget.other}
-                      </li>
-                    </ul>
+                    {project.budget}
                   </div>
                 </Table.Row>
               ))}
