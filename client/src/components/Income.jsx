@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useGlobalContext } from "../context/Context";
-import Form from "./Form";
+import IncomeForm from "./IncomeForm";
 import IncomeItem from "../IncomeItem/IncomeItem";
 
 function Income() {
@@ -14,11 +14,11 @@ function Income() {
       <div>
         <h1>Incomes</h1>
         <h2 className="total-income">
-          Total Income: <span>${totalIncome()}</span>
+          Total Budget: <span>${totalIncome()}</span>
         </h2>
         <div className="income-content">
           <div className="form-container">
-            <Form />
+            <IncomeForm />
           </div>
           <div className="incomes">
             {incomes.map((income) => {
