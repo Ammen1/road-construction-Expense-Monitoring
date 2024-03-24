@@ -14,12 +14,9 @@ const supplierSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  address: {
-    street: String,
-    city: String,
-    state: String,
-    country: String,
-    postalCode: String
+  city: {
+    type: String,
+    require: true
   },
   tinNumber: {
     type: String,
@@ -27,7 +24,7 @@ const supplierSchema = new mongoose.Schema({
     unique: true,
   },
   servicesProvided: {
-    type: [String],
+    type: String,
     required: true
   },
   project: {
@@ -39,12 +36,12 @@ const supplierSchema = new mongoose.Schema({
     ref:"User",
   },
   projectsCompleted: {
-    type: Number,
+    type: String,
     default: 0
   },
   isActive: {
     type: Boolean,
-    default: true
+    default: false
   }
 }, { timestamps: true });
 
