@@ -171,8 +171,10 @@ export default function DashPosts() {
                     </Link>
                   </Table.Cell>
                   <Table.Cell>
-                    Total Budget: {calculateTotalBudget(project.budget)}
+                    { project.budget}
                   </Table.Cell>
+
+
                   <Table.Cell>
                     {
                       availableManagers.find(
