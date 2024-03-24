@@ -1,11 +1,15 @@
 // supplierRouter.js
 import express from 'express';
-import {  applyForProject } from '../controllers/supplierController.js';
+import {  applyForProject, getAllApplications, getAllApplication } from '../controllers/supplierController.js';
+import { verifyToken } from "../utils/verifyUser.js";
 
 const router = express.Router();
 
 
 // POST request to apply for a project
-router.post('/apply', applyForProject);
+router.post('/apply', verifyToken,  applyForProject);
+router.get('/applications',verifyToken,  getAllApplications);
+router.get('/application/:userId', verifyToken, getAllApplication);
+
 
 export default router;
