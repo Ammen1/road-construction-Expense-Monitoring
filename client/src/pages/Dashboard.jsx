@@ -16,6 +16,7 @@ import DashpproveSupplier from "../components/DashpproveSupplier";
 import DashMyApplication from "../components/DashMyApplication";
 import DashFinance from "../components/DashFinance";
 import DashTasks from "../components/DashTasks";
+import Notification from "../components/Notification";
 
 export default function Dashboard() {
   const location = useLocation();
@@ -28,7 +29,7 @@ export default function Dashboard() {
     }
   }, [location.search]);
   return (
-    <div className="min-h-screen flex flex-col md:flex-row">
+    <div className="flex flex-col min-h-screen md:flex-row">
       <div className="md:w-56">
         {/* Sidebar */}
         <DashSidebar />
@@ -52,6 +53,7 @@ export default function Dashboard() {
       {tab === "myapplication" && <DashMyApplication />}
       {tab === "audit" && <DashFinance />}
       {tab === "task" && <DashTasks />}
+      {tab === "notif" && <Notification />}
     </div>
   );
 }
