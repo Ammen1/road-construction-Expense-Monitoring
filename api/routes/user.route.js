@@ -20,6 +20,6 @@ router.get("/getusers",  getUsers);
 router.get("/getemployees", getEmployees)
 router.get("/:userId", getUser);
 router.get("/:getmanagers", getManagers);
-router.get("/notifications", getNotificationsList);
+router.get("/notifications/:userId", getNotificationsList);
 
 export default router;
