@@ -49,7 +49,7 @@ export default function Header() {
   };
 
   return (
-    <Navbar className="border-b-2 dark:border-b-teal-600  p-3 ">
+    <Navbar className="border-b-2 dark:black py-4 p-6 ">
       <Link
         to="/"
         className="self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white"
@@ -119,6 +119,9 @@ export default function Header() {
         </Navbar.Link>
         <Navbar.Link active={path === "/projects"} as={"div"}>
           <Link to="/projects">Projects</Link>
+        </Navbar.Link>
+        <Navbar.Link active={path === "/group"} as={"div"}>
+          <Link to="/group">Our Group</Link>
         </Navbar.Link>
       </Navbar.Collapse>
     </Navbar>
