@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Label, TextInput, Select } from "flowbite-react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const CreateTask = () => {
   const [formData, setFormData] = useState({
@@ -11,9 +12,15 @@ const CreateTask = () => {
     date: "",
     priority: "",
     assets: [],
+    project: "",
+    activities: [],
+    subTasks: [],
+    isTrashed: "false",
   });
   const [publishError, setPublishError] = useState(null);
   const [availableEmployees, setAvailableEmployees] = useState([]);
+  const [userProjects, setUserProjects] = useState([]);
+  const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,6 +38,26 @@ const CreateTask = () => {
     };
     getEmployees();
   }, []);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const res = await fetch(`/api/project/getprojects?userId=${currentUser._id}`);
+        const data = await res.json();
+  
+        if (Array.isArray(data.projects)) {
+          setUserProjects(data.projects); 
+        }
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+      } 
+    };
+  
+    if (currentUser && currentUser.isManager) {
+      fetchProjects();
+    }
+  }, [currentUser, currentUser._id]);
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -60,6 +87,10 @@ const CreateTask = () => {
         date: "",
         priority: "",
         assets: [],
+        project: "",
+        activities: [],
+        subTasks: [],
+        isTrashed: "false",
       });
     } catch (error) {
       console.error("Error:", error);
@@ -69,16 +100,16 @@ const CreateTask = () => {
 
   return (
     <div className="min-h-screen lg:mt-10">
-      <div className="flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-5">
+      <div className="flex flex-col max-w-3xl gap-5 p-3 mx-auto md:flex-row md:items-center">
         {/* Left */}
-        <div className="flex-1 justify-center items-center text-center ">
-          <Link to="/" className="font-bold dark:text-white text-4xl">
-            <span className="px-2 py-1 text-center bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white">
+        <div className="items-center justify-center flex-1 text-center ">
+          <Link to="/" className="text-4xl font-bold dark:text-white">
+            <span className="px-2 py-1 text-center text-white rounded-lg bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
               Road Con
             </span>
             Monitor
           </Link>
-          <p className="text-md mt-5">
+          <p className="mt-5 text-md">
             This is a road construction Expense Monitoring System for a
             contractor project. You can create project up with all fields.
           </p>
@@ -114,7 +145,25 @@ const CreateTask = () => {
                 </option>
               ))}
             </Select>
-          
+            <Label value="Project" />
+            <Select
+              className="text-white"
+              label="Select Project"
+              id="project"
+              value={formData.project}
+              onChange={(e) =>
+                setFormData({ ...formData, project: e.target.value })
+              }
+            >
+              <option value="" disabled>
+                Choose an Project
+              </option>
+              {userProjects.map((project) => (
+                <option key={project._id} value={project._id}>
+                  {project.name}
+                </option>
+              ))}
+            </Select>
               <Label value="Stage" />
               <Select
                 id="stage"
@@ -127,8 +176,7 @@ const CreateTask = () => {
                 <option value="todo">To Do</option>
                 <option value="in progress">In Progress</option>
                 <option value="completed">Completed</option>
-              </Select>
-           
+              </Select>          
               <Label value="Date" />
               <TextInput
                 type="date"
@@ -137,8 +185,7 @@ const CreateTask = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, date: e.target.value })
                 }
-              />
-            
+              />          
               <Label value="Priority" />
               <Select
                 id="priority"
@@ -151,18 +198,28 @@ const CreateTask = () => {
                 <option value="low">Low</option>
                 <option value="medium">Medium</option>
                 <option value="high">High</option>
-              </Select>
-           
+              </Select>          
               <Label value="Assets" />
               <TextInput
                 type="text"
                 placeholder="Enter task assets"
-                value={formData.assets}
-                onChange={(e) =>
+                value={formData.assets}                onChange={(e) =>
                   setFormData({ ...formData, assets: e.target.value })
                 }
               />
-            </div>
+            </div>        
+            <Label value="Trashed" />
+            <Select
+              id="isTrashed"
+              value={formData.isTrashed}
+              onChange={(e) =>
+                setFormData({ ...formData, isTrashed: e.target.value })
+              }
+            >
+              <option value="false">No</option>
+              <option value="true">Yes</option>
+            </Select>
+
             <Button type="submit" gradientDuoTone="purpleToPink">
               Create Task
             </Button>
@@ -177,3 +234,5 @@ const CreateTask = () => {
 };
 
 export default CreateTask;
+
+               
