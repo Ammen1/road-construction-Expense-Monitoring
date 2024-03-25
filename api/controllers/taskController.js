@@ -125,7 +125,7 @@ export const postTaskActivity = async (req, res) => {
 
 export const dashboardStatistics = async (req, res) => {
   try {
-    const { userId, isAdmin } = req.user;
+    const { userId, isManager } = req.user;
 
     const allTasks = isAdmin
       ? await Task.find({
@@ -133,7 +133,7 @@ export const dashboardStatistics = async (req, res) => {
         })
           .populate({
             path: "team",
-            select: "name role title email",
+            select: "username",
           })
           .sort({ _id: -1 })
       : await Task.find({
@@ -142,12 +142,12 @@ export const dashboardStatistics = async (req, res) => {
         })
           .populate({
             path: "team",
-            select: "name role title email",
+            select: "username",
           })
           .sort({ _id: -1 });
 
     const users = await User.find({ isActive: true })
-      .select("name title role isAdmin createdAt")
+      .select("name title role isManager createdAt")
       .limit(10)
       .sort({ _id: -1 });
 
@@ -199,7 +199,7 @@ export const dashboardStatistics = async (req, res) => {
 
 export const getTasks = async (req, res) => {
   try {
-    const { stage, isTrashed } = req.query;
+    const { stage, isTrashed, userId } = req.query;
 
     let query = { isTrashed: isTrashed ? true : false };
 
@@ -207,10 +207,18 @@ export const getTasks = async (req, res) => {
       query.stage = stage;
     }
 
+    if (userId) {
+      query['activities.by'] = userId; // Filter tasks by user ID
+    }
+
     let queryResult = Task.find(query)
       .populate({
         path: "team",
-        select: "name title email",
+        select: "username",
+      })
+      .populate({
+        path: "activities",
+        select: "by",
       })
       .sort({ _id: -1 });
 
@@ -221,10 +229,11 @@ export const getTasks = async (req, res) => {
       tasks,
     });
   } catch (error) {
-    console.log(error);
-    return res.status(400).json({ status: false, message: error.message });
+    console.error(error);
+    return res.status(500).json({ status: false, message: "Failed to fetch tasks" });
   }
 };
+
 
 export const getTask = async (req, res) => {
   try {
@@ -233,11 +242,11 @@ export const getTask = async (req, res) => {
     const task = await Task.findById(id)
       .populate({
         path: "team",
-        select: "name title role email",
+        select: "usename",
       })
       .populate({
         path: "activities.by",
-        select: "name",
+        select: "activity",
       });
 
     res.status(200).json({
@@ -348,5 +357,21 @@ export const deleteRestoreTask = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(400).json({ status: false, message: error.message });
+  }
+};
+
+
+
+// noticeController.js
+
+
+// Controller function to get notice data
+export const getNoticeData = async (req, res) => {
+  try {
+    const notices = await Notice.find().populate("team").populate("task").populate("isRead");
+    res.status(200).json(notices);
+  } catch (error) {
+    console.error("Error fetching notice data:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
