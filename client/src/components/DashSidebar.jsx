@@ -97,15 +97,6 @@ export default function DashSidebar() {
               Profile
             </Sidebar.Item>
           </Link>
-          <Link to="/dashboard?tab=create-expense">
-            <Sidebar.Item
-              active={tab === "create-expense"}
-              icon={HiBell}
-              as="div"
-            >
-              Notifications
-            </Sidebar.Item>
-          </Link>
           {currentUser && currentUser.isManager && (
           <Link to="/dashboard?tab=tasks">
           <Sidebar.Item
@@ -214,6 +205,18 @@ export default function DashSidebar() {
           >
             My Tasks
           </Sidebar.Item>
+          </Link>
+          
+          )}
+          {currentUser && currentUser.isEmployee && (
+            <Link to="/dashboard?tab=notif">
+            <Sidebar.Item
+              active={tab === "notif"}
+              icon={HiBell}
+              as="div"
+            >
+              Notifications
+            </Sidebar.Item>
           </Link>
           )}
           {currentUser.isAdmin && (

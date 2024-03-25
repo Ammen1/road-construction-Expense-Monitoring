@@ -50,20 +50,29 @@ const TasksComponent = () => {
       {loadingTasks && <p>Loading tasks...</p>}
       {errorTasks && <p>Error fetching tasks: {errorTasks}</p>}
       {tasks.map((task, index) => (
-        <div key={task._id} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4 px-4 mb-8">
-          <Card className="task-card bg-white shadow-lg rounded-lg overflow-hidden">
+        <div key={task._id} className="w-full px-4 mb-8 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4">
+          <Card className="overflow-hidden bg-white rounded-lg shadow-lg task-card">
             <div className="p-6">
-              <h4 className="text-lg font-semibold mb-2">{task.title}</h4>
+              <h4 className="mb-2 text-lg font-semibold">{task.title}</h4>
               <p className="text-sm text-gray-600">Date: {new Date(task.date).toLocaleDateString()}</p>
               <p className="text-sm text-gray-600">Priority: {task.priority}</p>
               <p className="text-sm text-gray-600">Stage: {task.stage}</p>
-              {task.activities && task.activities.activity && <p className="text-sm text-gray-600">Activity: {task.activities.activity}</p>}
+              {task.activities && task.activities.activity && (
+              <p className="text-sm text-gray-600">
+                Activity: {task.activities && task.activities.activity} assigned:{" "}
+                {Array.isArray(task.activities) &&
+                  task.activities.by.map((user) => (
+                    <span key={user._id}>{user.by.usename}</span>
+                  ))}
+              </p>
+            )}
+
               <h1 className="text-sm text-gray-600">Assets: {task.assets.join(', ')}</h1>
               <div className="mt-4">
                 <p className="text-sm text-gray-600">User Name:</p>
                 <div className="flex space-x-2">
                   {task.team.map((user) => (
-                    <span key={user._id} className="bg-gray-200 text-gray-800 px-2 py-1 rounded-md text-sm">{user.username}</span>
+                    <span key={user._id} className="px-2 py-1 text-sm text-gray-800 bg-gray-200 rounded-md">{user.username}</span>
                   ))}
                 </div>
               </div>
