@@ -10,9 +10,9 @@ const PricingList = () => {
           key={item.id}
           className="w-full max-w-[25rem] dark:bg-black px-6 py-8 bg-n-8 border border-n-6 rounded-lg shadow-lg"
         >
-          <h4 className="text-xl font-semibold text-n-1/25 mb-4">{item.title}</h4>
+          <h4 className="mb-4 text-xl font-semibold text-n-1/25">{item.title}</h4>
 
-          <p className="text-n-1/50 mb-6">{item.description}</p>
+          <p className="mb-6 text-n-1/50">{item.description}</p>
 
           <div className="flex items-center justify-between mb-6">
             <div className="text-2xl font-bold text-n-1">{item.price}</div>
