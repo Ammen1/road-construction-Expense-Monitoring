@@ -98,25 +98,25 @@ export const duplicateTask = async (req, res) => {
 
 export const postTaskActivity = async (req, res) => {
   try {
-    const { id } = req.params;
-    const { userId } = req.user;
+    const { taskId } = req.body;
     const { type, activity } = req.body;
 
-    const task = await Task.findById(id);
+    // Check if the task exists and has activities
+    const task = await Task.findById(taskId);
+    if (!task || !task.activities) {
+      throw new Error('Task not found or has no activities');
+    }
 
     const data = {
       type,
       activity,
-      by: userId,
     };
 
     task.activities.push(data);
 
     await task.save();
 
-    res
-      .status(200)
-      .json({ status: true, message: "Activity posted successfully." });
+    res.status(200).json({ status: true, message: "Activity posted successfully." });
   } catch (error) {
     console.log(error);
     return res.status(400).json({ status: false, message: error.message });
@@ -125,28 +125,13 @@ export const postTaskActivity = async (req, res) => {
 
 export const dashboardStatistics = async (req, res) => {
   try {
-    const { userId, isManager } = req.user;
+    const { userId, isManager } = req.body;
 
-    const allTasks = isAdmin
-      ? await Task.find({
-          isTrashed: false,
-        })
-          .populate({
-            path: "team",
-            select: "username",
-          })
-          .sort({ _id: -1 })
-      : await Task.find({
-          isTrashed: false,
-          team: { $all: [userId] },
-        })
-          .populate({
-            path: "team",
-            select: "username",
-          })
-          .sort({ _id: -1 });
+    const allTasks = await Task.find({
+          isTrashed: false })
+  
 
-    const users = await User.find({ isActive: true })
+    const users = await User.find()
       .select("name title role isManager createdAt")
       .limit(10)
       .sort({ _id: -1 });
@@ -181,7 +166,7 @@ export const dashboardStatistics = async (req, res) => {
     const summary = {
       totalTasks,
       last10Task,
-      users: isAdmin ? users : [],
+      users: isManager ? users : [],
       tasks: groupTaskks,
       graphData: groupData,
     };
@@ -218,7 +203,7 @@ export const getTasks = async (req, res) => {
       })
       .populate({
         path: "activities",
-        select: "by",
+        select: "activity.by",
       })
       .sort({ _id: -1 });
 
@@ -359,11 +344,6 @@ export const deleteRestoreTask = async (req, res) => {
     return res.status(400).json({ status: false, message: error.message });
   }
 };
-
-
-
-// noticeController.js
-
 
 // Controller function to get notice data
 export const getNoticeData = async (req, res) => {
