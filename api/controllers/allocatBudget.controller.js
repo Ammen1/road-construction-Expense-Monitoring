@@ -1,6 +1,10 @@
 import Project from "../models/allocateBudget.model.js";
 import { errorHandler } from "../utils/error.js";
 import mongoose from "mongoose";
+import PDFDocument from 'pdfkit';
+import fs from 'fs';
+import nodemailer from 'nodemailer';
+import ManagerInput from '../models/Report.model.js'; 
 
 export const createProject = async (req, res) => {
   try {
@@ -168,5 +172,148 @@ export const updateproject = async (req, res, next) => {
     res.status(200).json(updatedProject);
   } catch (error) {
     next(error);
+  }
+};
+
+
+export const generateProjectReport = async (req, res) => {
+  try {
+    // Fetch projects from the database
+    const projects = await Project.find().populate('manager').populate('employee');
+
+    // Create a new PDF document
+    const doc = new PDFDocument();
+    // Pipe the PDF into a writeable stream to save to a file
+    const stream = fs.createWriteStream('project_report.pdf');
+    doc.pipe(stream);
+
+    // Generate report content
+    doc.fontSize(14).text('Project Report', { align: 'center' }).moveDown();
+
+    projects.forEach(project => {
+      doc.fontSize(12)
+        .text(`Name: ${project.name}`)
+        .text(`Description: ${project.description}`)
+        .text(`Start Date: ${project.startDate}`)
+        .text(`End Date: ${project.endDate}`)
+        .text(`Location: ${project.location}`)
+        .text(`Manager: ${project.manager ? project.manager.name : 'N/A'}`)
+        .text(`Employee: ${project.employee ? project.employee.name : 'N/A'}`)
+        .moveDown();
+    });
+
+    // Finalize the PDF
+    doc.end();
+
+    // Send the PDF file as a response
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename="project_report.pdf"');
+    fs.createReadStream('project_report.pdf').pipe(res);
+  } catch (error) {
+    console.error("Error generating project report:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+
+
+
+export const generateProjectReports = async (req, res) => {
+  try {
+    // Fetch projects from the database
+    const projects = await Project.find().populate('manager').populate('employee');
+
+    // Create a new PDF document
+    const doc = new PDFDocument();
+    const pdfPath = './project_report.pdf'; 
+
+    // Generate report content
+    doc.fontSize(14).text('Project Report', { align: 'center' }).moveDown();
+
+    projects.forEach(project => {
+      doc.fontSize(12)
+        .text(`Name: ${project.name}`)
+        .text(`Description: ${project.description}`)
+        .text(`Start Date: ${project.startDate}`)
+        .text(`End Date: ${project.endDate}`)
+        .text(`Location: ${project.location}`)
+        .text(`Manager: ${project.manager ? project.manager.name : 'N/A'}`)
+        .text(`Employee: ${project.employee ? project.employee.name : 'N/A'}`)
+        .moveDown();
+    });
+
+    // Finalize the PDF and save to a file
+    doc.pipe(fs.createWriteStream(pdfPath));
+    doc.end();
+
+    // Save the PDF file to ManagerInput schema
+    const pdfData = fs.readFileSync(pdfPath);
+    const managerInput = new ManagerInput({
+      projectReport: pdfData, 
+    });
+    await managerInput.save();
+
+    // Send the PDF report to the manager via email
+    await sendReportByEmail(pdfPath, 'amenguda@gmail.com'); 
+
+    // Send the PDF file as a response
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename="project_report.pdf"');
+    fs.createReadStream(pdfPath).pipe(res);
+  } catch (error) {
+    console.error("Error generating project report:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+const sendReportByEmail = async (pdfPath, managerEmail) => {
+  try {
+    // Create a Nodemailer transporter
+    const transporter = nodemailer.createTransport({
+      host: "mail.gooderash.com",
+      port: 465,
+      secure: true, // Use SSL
+      auth: {
+        user: 'e-learning@gooderash.com',
+        pass: 'Amen#19729',
+      },
+    });
+
+    // Setup email data
+    const mailOptions = {
+      from: 'e-learning@gooderash.com',
+      to: managerEmail,
+      subject: 'Project Report',
+      text: 'Please find the attached project report.',
+      attachments: [{
+        filename: 'project_report.pdf',
+        path: pdfPath, 
+      }],
+    };
+    // Send email
+    await transporter.sendMail(mailOptions);
+    console.log('Report sent to manager successfully');
+  } catch (error) {
+    console.error('Error sending email:', error);
+  }
+};
+
+
+
+export const getProjectReport = async (req, res) => {
+  try {
+  
+    const managerInput = await ManagerInput.find();
+
+    if (!managerInput) {
+      return res.status(404).json({ error: 'Project report not found' });
+    }
+
+    // Send the PDF data as a response
+    res.setHeader('Content-Type', 'application/pdf');
+    res.send(managerInput.projectReport);
+  } catch (error) {
+    console.error("Error fetching project report:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
