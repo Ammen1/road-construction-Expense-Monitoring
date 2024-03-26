@@ -35,6 +35,26 @@ export default function DashApproveSupplier() {
     // Handle edit action here, e.g., navigate to edit page
   };
 
+  const handleApproveApplication = async (applicationId) => {
+    try {
+      setLoading(true);
+      await axios.put(`/api/supplier/application/${applicationId}`, { isActive: true });
+      // Assuming the API updates the isActive field
+      const updatedApplications = applications.map(app => {
+        if (app._id === applicationId) {
+          return { ...app, isActive: true };
+        }
+        return app;
+      });
+      setApplications(updatedApplications);
+    } catch (error) {
+      console.error('Error approving application:', error);
+      setError('Error approving application. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="table-auto max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
       {loading && <p>Loading...</p>}
@@ -52,7 +72,9 @@ export default function DashApproveSupplier() {
               <Table.HeadCell>ServicesProvided</Table.HeadCell>
               <Table.HeadCell>Project</Table.HeadCell>
               <Table.HeadCell>Supplier</Table.HeadCell>
+              <Table.HeadCell>isActive</Table.HeadCell>
               <Table.HeadCell>ProjectsCompleted</Table.HeadCell>
+              <Table.HeadCell>Approve</Table.HeadCell>
               <Table.HeadCell>isActive</Table.HeadCell>
               <Table.HeadCell>Actions</Table.HeadCell>
             </Table.Head>
@@ -64,14 +86,18 @@ export default function DashApproveSupplier() {
                 <Table.Cell>{application.name}</Table.Cell>
                 <Table.Cell>{application.email}</Table.Cell>
                 <Table.Cell>{application.phone}</Table.Cell>
-                <Table.Cell>
-                {application.city}
-                </Table.Cell>
+                <Table.Cell>{application.city}</Table.Cell>
                 <Table.Cell>{application.servicesProvided}</Table.Cell>
                 <Table.Cell>{application.project}</Table.Cell>
                 <Table.Cell>{application.user}</Table.Cell>
+                <Table.Cell>{application.isActive ? 'Yes' : 'No'}</Table.Cell>
                 <Table.Cell>{application.projectsCompleted}</Table.Cell>
                 <Table.Cell>{application.isActive ? 'Yes' : 'No'}</Table.Cell>
+                  <Table.Cell>
+                    <Button color="success" onClick={() => handleApproveApplication(application._id)}>
+                      Approve
+                    </Button>
+                  </Table.Cell>
                 <Table.Cell>
                 <Button color="info" onClick={() => handleEditApplication(application._id)}>Edit</Button>
                 </Table.Cell>
@@ -111,3 +137,6 @@ export default function DashApproveSupplier() {
     </div>
   );
 }
+
+                
+               
