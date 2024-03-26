@@ -59,9 +59,9 @@ export const getAllApplication = async (req, res, next) => {
         if (req.user.id !== req.params.userId) {
             return next(errorHandler(403, "You are not allowed to access this user's applications"));
         }
-        const { userId } = req.params;
+        const { userId } = req.body;
         // Fetch applications where the user field matches the requested user ID
-        const applications = await Supplier.findById({ user: mongoose.Types.ObjectId(userId) }).populate('project');
+        const applications = await Supplier.findById({ user: mongoose.Types.ObjectId(userId) }).populate('name');
         console.log(applications);
         res.status(200).json(applications);
     } catch (error) {
@@ -70,6 +70,26 @@ export const getAllApplication = async (req, res, next) => {
     }
 };
 
+
+export const approve = async (req, res, next) => {
+    try {
+      const { applicationId } = req.params;
+  
+      const approve = await Supplier.findById(applicationId);
+  
+      approve.isActive = true;
+  
+      await approve.save();
+  
+      res.status(200).json({
+        status: true,
+        message: `Task approved successfully.`,
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json({ status: false, message: error.message });
+    }
+  };
 
 
 
