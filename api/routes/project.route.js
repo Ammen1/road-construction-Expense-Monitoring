@@ -6,6 +6,9 @@ import {
   updateproject,
   getProject,
   getProjectByManager,
+  generateProjectReport,
+  generateProjectReports,
+  getProjectReport,
 
 } from "../controllers/allocatBudget.controller.js";
 import { verifyToken } from "../utils/verifyUser.js";
@@ -26,5 +29,8 @@ router.patch(
   "/projects/:projectId/suppliers/:userId",
   manageSupplierApplication );
 router.get("/managerproject/:userId", getProjectByManager);
+router.post("/reports", generateProjectReport);
+router.post('/generate', generateProjectReports);
+router.get('/report', getProjectReport);
 
 export default router;
