@@ -17,6 +17,11 @@ import DashMyApplication from "../components/DashMyApplication";
 import DashFinance from "../components/DashFinance";
 import DashTasks from "../components/DashTasks";
 import Notification from "../components/Notification";
+import PostActivity from "./PostActivity";
+import DashboardManager from "../components/DashboardManger";
+import CardBuy from "./CardBuy";
+import Report from "../components/Report";
+import ProjectReport from "../components/ProjectReport";
 
 export default function Dashboard() {
   const location = useLocation();
@@ -54,6 +59,11 @@ export default function Dashboard() {
       {tab === "audit" && <DashFinance />}
       {tab === "task" && <DashTasks />}
       {tab === "notif" && <Notification />}
+      {tab === "post_activity" && <PostActivity />}
+      {tab === "dashs" && <DashboardManager />}
+      {tab === "buy" && <CardBuy />}
+      {tab === "report" && <Report/>}
+      {tab === "see_report" && <ProjectReport/>}
     </div>
   );
 }
