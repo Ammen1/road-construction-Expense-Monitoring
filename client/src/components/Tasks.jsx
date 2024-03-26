@@ -1,29 +1,30 @@
-import { Modal, Table, Button } from "flowbite-react";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { HiOutlineExclamationCircle } from "react-icons/hi";
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { Table, Button } from 'flowbite-react';
+import { HiOutlineExclamationCircle } from 'react-icons/hi';
+import PostActivity from '../pages/PostActivity';
 
-const TaskList = () => {
+const TaskList = (taskId) => {
   const { currentUser } = useSelector((state) => state.user);
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showPostActivity, setShowPostActivity] = useState(false);
 
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/task/");
+        const response = await fetch('http://localhost:3000/api/task/');
         const data = await response.json();
-        console.log(data);
 
         if (response.ok) {
           setTasks(data.tasks);
         } else {
-          setError(data.message || "Failed to fetch tasks");
+          setError(data.message || 'Failed to fetch tasks');
         }
       } catch (error) {
-        setError("Something went wrong while fetching the tasks");
+        setError('Something went wrong while fetching the tasks');
       } finally {
         setLoading(false);
       }
@@ -31,6 +32,10 @@ const TaskList = () => {
 
     fetchTasks();
   }, []);
+
+  const handleCreateSubtask = (taskId) => {
+    setShowPostActivity(true);
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -41,24 +46,23 @@ const TaskList = () => {
   }
 
   return (
-    <div className="table-auto  max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
-     {currentUser.isManager && (
-        <Link to={"/dashboard?tab=create-task"}>
-          <Button type="button" gradientDuoTone="purpleToPink" className="">
+    <div className="table-auto max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
+      {currentUser.isManager && (
+        <Link to="/dashboard?tab=create-task">
+          <Button type="button" gradientDuoTone="purpleToPink">
             Create a Task
           </Button>
         </Link>
       )}
-      <Table hoverable shadow="md" className=" shadow-md mt-6 w-full">
-        <Table.Head>      
-            <Table.HeadCell>TITLE</Table.HeadCell>
-            <Table.HeadCell>DATE</Table.HeadCell>
-            <Table.HeadCell>PRIORITY</Table.HeadCell>
-            <Table.HeadCell>STAGE</Table.HeadCell>
-            <Table.HeadCell>ASSIGNEDTO</Table.HeadCell>
-            <Table.HeadCell>ACTIVITIES</Table.HeadCell>
-            <Table.HeadCell>SUBTASKS</Table.HeadCell>
-            <Table.HeadCell>ASSETS</Table.HeadCell>   
+      <Table hoverable shadow="md" className="shadow-md mt-6 w-full">
+        <Table.Head>
+          <Table.HeadCell>TITLE</Table.HeadCell>
+          <Table.HeadCell>DATE</Table.HeadCell>
+          <Table.HeadCell>PRIORITY</Table.HeadCell>
+          <Table.HeadCell>STAGE</Table.HeadCell>
+          <Table.HeadCell>ASSIGNED TO</Table.HeadCell>
+          <Table.HeadCell>ASSETS</Table.HeadCell>
+          <Table.HeadCell>ADD SUB TASKS</Table.HeadCell>
         </Table.Head>
         <Table.Body>
           {tasks.map((task) => (
@@ -70,30 +74,7 @@ const TaskList = () => {
               <Table.Cell>
                 <ul>
                   {task.team.map((member) => (
-                    <li key={member._id}>{member.email}</li>
-                  ))}
-                </ul>
-              </Table.Cell>
-              <Table.Cell>
-  <ul>
-    {Array.isArray(task.activities) &&
-      task.activities.map((activity, index) => (
-        <li key={index}>
-          Type: {activity.type}, Activity: {activity.activity},
-          Date: {new Date(activity.date).toLocaleString()}
-        </li>
-      ))}
-  </ul>
-</Table.Cell>
-
-            <Table.Cell>
-                <ul>
-                  {task.subTasks.map((subtask, index) => (
-                    <li key={index}>
-                      {subtask.title}
-                      Date: {subtask.date}, 
-                      Tag: {subtask.tag}
-                    </li>
+                    <li key={member._id}>{member.username}</li>
                   ))}
                 </ul>
               </Table.Cell>
@@ -104,10 +85,16 @@ const TaskList = () => {
                   ))}
                 </ul>
               </Table.Cell>
+              <Table.Cell>
+                <Button color="info" onClick={() => handleCreateSubtask(task._id)}>
+                  Add Subtask
+                </Button>
+              </Table.Cell>
             </Table.Row>
           ))}
         </Table.Body>
       </Table>
+      {showPostActivity && <PostActivity id={taskId} onSubTaskCreated={() => setShowPostActivity(false)} />}
     </div>
   );
 };
