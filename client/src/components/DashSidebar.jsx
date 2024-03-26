@@ -28,6 +28,7 @@ import { Link, useLocation } from "react-router-dom";
 import { signoutSuccess } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import Notification from "./Notification";
 
 export default function DashSidebar() {
   const location = useLocation();
@@ -165,14 +166,25 @@ export default function DashSidebar() {
            </Link>
          )}
           {currentUser && currentUser.isSupplier && (
-          <Link to="/dashboard?tab=projects">
+          <Link to="/dashboard?tab=mypayment">
           <Sidebar.Item
-            active={tab === "projects"}
+            active={tab === "mypayment"}
             icon={HiEmojiHappy}
             as="div"
           >
             MyPayment
           </Sidebar.Item>
+          </Link>
+          )}
+            {currentUser && currentUser.isSupplier && (
+            <Link to="/dashboard?tab=payment">
+            <Sidebar.Item
+              active={tab === "payment"}
+              icon={HiBell}
+              as="div"
+            >
+              Request For Payment
+            </Sidebar.Item>
           </Link>
           )}
           {currentUser && currentUser.isSupplier && (
@@ -238,7 +250,7 @@ export default function DashSidebar() {
               icon={HiBell}
               as="div"
             >
-              Notifications
+              <Notification />
             </Sidebar.Item>
           </Link>
           )}
