@@ -62,10 +62,10 @@ export default function DashMyApplication() {
             <Table.Head>
               <Table.HeadCell>Date</Table.HeadCell>
               <Table.HeadCell>Name</Table.HeadCell>
-              <Table.HeadCell>email</Table.HeadCell>
+              <Table.HeadCell>Email</Table.HeadCell>
               <Table.HeadCell>Phone</Table.HeadCell>
               <Table.HeadCell>Project</Table.HeadCell>
-              <Table.HeadCell>Status</Table.HeadCell>
+              <Table.HeadCell>Approved</Table.HeadCell>
               <Table.HeadCell>Actions</Table.HeadCell>
             </Table.Head>
             <Table.Body>
@@ -75,9 +75,8 @@ export default function DashMyApplication() {
                   <Table.Cell>{application.name}</Table.Cell>
                   <Table.Cell>{application.email}</Table.Cell>
                   <Table.Cell>{application.phone}</Table.Cell>
-                 
-                  <Table.Cell>{application.project}</Table.Cell>
-                  <Table.Cell>{application.isActive}</Table.Cell>
+                  <Table.Cell>{application.project }</Table.Cell>
+                  <Table.Cell>{application.isActive ? 'Yes' : 'No'}</Table.Cell>
                   <Table.Cell>
                     <Button color="info" onClick={() => handleEditApplication(application._id)}>Edit</Button>
                     <Button color="danger" onClick={() => handleDeleteConfirmation(application._id)}>Delete</Button>
