@@ -12,6 +12,7 @@ import {
   HiCalendar,
   HiEmojiHappy,
   HiOutlineThumbDown,
+  HiPlus,
 } from "react-icons/hi";
 import {
   MdAttachFile,
@@ -98,6 +99,17 @@ export default function DashSidebar() {
             </Sidebar.Item>
           </Link>
           {currentUser && currentUser.isManager && (
+          <Link to="/dashboard?tab=dashs">
+          <Sidebar.Item
+            active={tab === "dashs"}
+            icon={HiAnnotation}
+            as="div"
+          >
+            DashBoard
+          </Sidebar.Item>
+          </Link>
+          )}
+          {currentUser && currentUser.isManager && (
           <Link to="/dashboard?tab=tasks">
           <Sidebar.Item
             active={tab === "tasks"}
@@ -109,9 +121,9 @@ export default function DashSidebar() {
           </Link>
           )}
           {currentUser && currentUser.isManager && (
-          <Link to="/dashboard?tab=projects">
+          <Link to="/dashboard?tab=report">
           <Sidebar.Item
-            active={tab === "projects"}
+            active={tab === "report"}
             icon={HiDocumentText}
             as="div"
           >
@@ -138,6 +150,17 @@ export default function DashSidebar() {
                as="div"
              >
                Projects
+             </Sidebar.Item>
+           </Link>
+         )}
+          {currentUser && currentUser.isManager && (
+          <Link to="/dashboard?tab=post_activity">
+            <Sidebar.Item
+               active={tab === "post_activity"}
+               icon={HiPlus}
+               as="div"
+             >
+               Post Activity
              </Sidebar.Item>
            </Link>
          )}
@@ -175,9 +198,9 @@ export default function DashSidebar() {
           </Link>
           )}
           {currentUser && currentUser.isFinance && (
-          <Link to="/dashboard?tab=approve">
+          <Link to="/dashboard?tab=buy">
           <Sidebar.Item
-            active={tab === "approve"}
+            active={tab === "buy"}
             icon={MdOutlineKeyboardDoubleArrowDown}
             as="div"
           >
@@ -250,24 +273,6 @@ export default function DashSidebar() {
                   Comments
                 </Sidebar.Item>
               </Link>
-              <Link to="/dashboard?tab=create-expense">
-                <Sidebar.Item
-                  active={tab === "create-expense"}
-                  icon={HiTranslate}
-                  as="div"
-                >
-                  Create Expense
-                </Sidebar.Item>
-              </Link>
-              <Link to="/dashboard?tab=create-expense">
-                <Sidebar.Item
-                  active={tab === "create-expense"}
-                  icon={HiCalendar}
-                  as="div"
-                >
-                  Set Schedule
-                </Sidebar.Item>
-              </Link>
               <Link to="/dashboard?tab=create-budget">
                 <Sidebar.Item
                   active={tab === "create-budget"}
@@ -288,9 +293,9 @@ export default function DashSidebar() {
                   Approve Supplier
                 </Sidebar.Item>
               </Link>
-              <Link to="/dashboard?tab=create-expense">
+              <Link to="/dashboard?tab=see_report">
                 <Sidebar.Item
-                  active={tab === "create-expense"}
+                  active={tab === "see_report"}
                   icon={HiOutlineBadgeCheck}
                   as="div"
                 >
