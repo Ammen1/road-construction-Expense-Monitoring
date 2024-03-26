@@ -247,7 +247,7 @@ export const getTask = async (req, res) => {
 export const createSubTask = async (req, res) => {
   try {
     const { title, tag, date } = req.body;
-    const { id } = req.params;
+    const { id } = req.body;
 
     const newSubTask = {
       title,
@@ -255,7 +255,7 @@ export const createSubTask = async (req, res) => {
       tag,
     };
 
-    const task = await Task.findById(id);
+    const task = await Task.find();
 
     task.subTasks.push(newSubTask);
 
@@ -353,5 +353,22 @@ export const getNoticeData = async (req, res) => {
   } catch (error) {
     console.error("Error fetching notice data:", error);
     res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+
+export const handleChangeStage = async (taskId, newStage) => {
+  try {
+    // Find the task by its ID and update its stage
+    const updatedTask = await Task.findByIdAndUpdate(taskId, { stage: newStage }, { new: true });
+
+    if (!updatedTask) {
+      console.log(`Task with ID ${taskId} not found`);
+      return; // Exit function if task not found
+    }
+
+    console.log(`Stage of task ${taskId} updated to ${newStage}`);
+  } catch (error) {
+    console.error(`Error updating stage of task ${taskId}:`, error);
   }
 };
