@@ -5,8 +5,9 @@ import authRoutes from "./routes/auth.route.js";
 import userRoutes from "./routes/user.route.js";
 import expense from "./routes/expense.route.js";
 import project from "./routes/project.route.js";
-import taskRoutes from "./routes/taskRoutes.js"
-import supplier from "./routes/supplierRouter.js"
+import taskRoutes from "./routes/taskRoutes.js";
+import supplier from "./routes/supplierRouter.js";
+import PaymentRoutes from "./routes/payment.route.js";
 import cors from "cors";
 
 import cookieParser from "cookie-parser";
@@ -41,7 +42,8 @@ app.use("/api/user", userRoutes);
 app.use("/api/expense", expense);
 app.use("/api/project", project);
 app.use("/api/task", taskRoutes);
-app.use("/api/supplier", supplier)
+app.use("/api/supplier", supplier);
+app.use("/api/payment", PaymentRoutes);
 
 app.use(express.static(path.join(__dirname, "/client/dist")));
 
