@@ -124,6 +124,9 @@ export default function DashPosts() {
     const totalBudget = materials + labor + equipment + permits;
     return totalBudget;
   };
+  const calculateAvailableFunds = (project) => {
+    return project.budget - project.expense;
+  };
 
   return (
     <div className="table-auto  max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
@@ -140,16 +143,16 @@ export default function DashPosts() {
         <>
           <Table hoverable className="shadow-md mt-6 w-full">
             <Table.Head>
-              <Table.HeadCell>date updated</Table.HeadCell>
+            <Table.HeadCell>project name</Table.HeadCell>
               <Table.HeadCell>project location</Table.HeadCell>
               <Table.HeadCell>budget</Table.HeadCell>
+              <Table.HeadCell>Expenses</Table.HeadCell>
+              <Table.HeadCell>Available Funds</Table.HeadCell>
               <Table.HeadCell>project manager</Table.HeadCell>
               <Table.HeadCell>project employee</Table.HeadCell>
-              <Table.HeadCell>project name</Table.HeadCell>
               <Table.HeadCell>start date</Table.HeadCell>
               <Table.HeadCell>end date</Table.HeadCell>
               <Table.HeadCell>status</Table.HeadCell>
-              <Table.HeadCell>project tasks</Table.HeadCell>
               <Table.HeadCell>delete</Table.HeadCell>
               <Table.HeadCell>edit</Table.HeadCell>
             </Table.Head>
@@ -159,20 +162,26 @@ export default function DashPosts() {
                   key={project._id}
                   className="bg-white dark:border-gray-700 dark:bg-gray-800"
                 >
+                  <Table.Cell>{project.name}</Table.Cell>
                   <Table.Cell>
-                    {new Date(project.updatedAt).toLocaleDateString()}
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Link
-                      className="font-medium text-gray-900 dark:text-white"
-                      to={`/post/${project.name}`}
-                    >
                       {project.location}
-                    </Link>
                   </Table.Cell>
                   <Table.Cell>
-                    { project.budget}
-                  </Table.Cell>
+                  {new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'ETH'
+                  }).format(project.budget)}
+                </Table.Cell>
+                <Table.Cell> {new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'ETH'
+                  }).format(project.expense)}</Table.Cell>
+                <Table.Cell className={`border px-4 py-2 ${calculateAvailableFunds(project) < 0 ? 'text-red-500' : ''}`}>
+                  {new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'ETH'
+                  }).format(calculateAvailableFunds(project))}
+                </Table.Cell>
 
 
                   <Table.Cell>
@@ -189,8 +198,6 @@ export default function DashPosts() {
                       )?.username
                     }
                   </Table.Cell>
-
-                  <Table.Cell>{project.name}</Table.Cell>
                   <Table.Cell>
                     {new Intl.DateTimeFormat("am-ET", {
                       weekday: "long",
@@ -210,21 +217,6 @@ export default function DashPosts() {
                   </Table.Cell>
 
                   <Table.Cell>{project.status}</Table.Cell>
-                  <Table.Cell>
-                    <div className=" font-bold  ">
-                      {" "}
-                      <Link to="/">
-                        {" "}
-                        <ul>
-                          {project.tasks.map((task) => (
-                            <li key={task._id}>
-                              <li>{task.status}</li>
-                            </li>
-                          ))}
-                        </ul>
-                      </Link>
-                    </div>
-                  </Table.Cell>
                   <Table.Cell>
                     <span
                       onClick={() => {

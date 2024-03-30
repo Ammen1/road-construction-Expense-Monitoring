@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 122 122">
+  <g>
+    <circle cx="61" cy="61" r="60" stroke="url(#gradient-1)" stroke-width="1.5"/>
+    <circle cx="61" cy="61" r="50" stroke="url(#gradient-2)" stroke-width="1.5"/>
+    <circle cx="61" cy="61" r="40" stroke="url(#gradient-3)" stroke-width="1.5"/>
+    <animateTransform attributeName="transform" type="rotate" from="0 61 61" to="-360 61 61" dur="4s" repeatCount="indefinite"/>
+  </g>
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M91 61.0002C91 44.4314 77.5685 31 61 31C44.4313 31 31 44.4314 31 61.0002C31 77.5686 44.4313 91 61 91C77.5685 91 91 77.5686 91 61.0002ZM59.3843 76.0318V61.9332L47.1719 54.8838C45.5813 56.2888 43.2101 56.5939 41.2706 55.4743C38.8418 54.0724 38.0097 50.9675 39.4119 48.5393C40.8141 46.1111 43.9197 45.2791 46.3484 46.681C48.288 47.8006 49.2093 50.0062 48.7876 52.0859L61 59.1353L73.2124 52.0859C72.7907 50.0062 73.712 47.8006 75.6516 46.681C78.0803 45.2791 81.1859 46.1111 82.5881 48.5393C83.9903 50.9675 83.1582 54.0724 80.7294 55.4743C78.7899 56.5939 76.4187 56.2888 74.8281 54.8838L62.6157 61.9332V76.0318C64.628 76.7066 66.0779 78.6071 66.0779 80.8463C66.0779 83.6501 63.8044 85.9231 61 85.9231C58.1956 85.9231 55.9221 83.6501 55.9221 80.8463C55.9221 78.6071 57.372 76.7066 59.3843 76.0318Z" fill="url(#gradient-fill)">
+    <animateTransform attributeName="transform" type="rotate" from="0 61 61" to="360 61 61" dur="8s" repeatCount="indefinite"/>
+  </path>
+  <defs>
+    <linearGradient id="gradient-1" x1="61" y1="1" x2="61" y2="121" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00D7AA"/>
+      <stop offset="1" stop-color="#0064FF"/>
+    </linearGradient>
+    <linearGradient id="gradient-2" x1="61" y1="11" x2="61" y2="111" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00D7AA"/>
+      <stop offset="1" stop-color="#0064FF"/>
+    </linearGradient>
+    <linearGradient id="gradient-3" x1="61" y1="21" x2="61" y2="101" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00D7AA"/>
+      <stop offset="1" stop-color="#0064FF"/>
+    </linearGradient>
+    <linearGradient id="gradient-fill" x1="0" y1="0" x2="1" y2="1" gradientTransform="rotate(45)">
+      <stop offset="0%" stop-color="#FFA07A"/>
+      <stop offset="50%" stop-color="#FF7F50"/>
+      <stop offset="100%" stop-color="#FF6347"/>
+    </linearGradient>
+  </defs>
+</svg>

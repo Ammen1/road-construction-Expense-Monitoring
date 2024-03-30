@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Button, Label, TextInput} from 'flowbite-react';
 
-export default function PostActivity({ id, onSubTaskCreated }) {
+export default function PostActivity({ id }) {
   const [title, setTitle] = useState('');
   const [tag, setTag] = useState('');
   const [date, setDate] = useState('');

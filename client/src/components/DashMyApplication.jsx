@@ -17,9 +17,7 @@ export default function DashMyApplication() {
     const fetchApplications = async () => {
       try {
         setLoading(true);
-        const userId = currentUser;
         const response = await axios.get(`/api/supplier/applications?userId=${currentUser}`);
-        console.log(response.data);
         setApplications(response.data);
       } catch (error) {
         console.error('Error fetching applications:', error);
@@ -34,6 +32,7 @@ export default function DashMyApplication() {
 
   const handleEditApplication = (applicationId) => {
     // Handle edit action here, e.g., navigate to edit page
+    console.log('Editing application with ID:', applicationId);
   };
 
   const handleDeleteConfirmation = (applicationId) => {
@@ -43,7 +42,7 @@ export default function DashMyApplication() {
 
   const handleDeleteApplication = async () => {
     try {
-      await axios.delete(`/api/supplier/applications/${applicationIdToDelete}`);
+      await axios.delete(`/api/supplier/application/${applicationIdToDelete}`);
       setApplications(applications.filter(app => app._id !== applicationIdToDelete));
       setShowModal(false);
     } catch (error) {

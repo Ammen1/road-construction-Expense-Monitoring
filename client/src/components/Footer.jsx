@@ -16,7 +16,7 @@ export default function FooterCom() {
       <div className="w-full max-w-7xl mx-auto">
         <div className="grid w-full justify-between sm:flex md:grid-cols-1">
           <div className="mt-5">
-            <div className="flex-1">
+            {/* <div className="flex-1">
               <Link to="/" className="font-bold dark:text-white text-4xl">
                 <span className="px-2 py-1  bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white">
                   Road Con
@@ -27,7 +27,7 @@ export default function FooterCom() {
                 This is a road construction Expense Monitoring System for a
                 contractor project. You can create project up with all fields .
               </p>
-            </div>
+            </div> */}
           </div>
           <div className="grid grid-cols-2 gap-8 mt-4 sm:grid-cols-3 sm:gap-6">
             <div>
@@ -46,24 +46,24 @@ export default function FooterCom() {
               </Footer.LinkGroup>
             </div>
             <div>
-              <Footer.Title title="Follow us" />
+              {/* <Footer.Title title="Follow us" />
               <Footer.LinkGroup col>
                 <Footer.Link
-                  href="https://www.github.com/ammen1"
+                  href="http://localhost:5173/"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   Github
                 </Footer.Link>
                 <Footer.Link href="#">Jimma University</Footer.Link>
-              </Footer.LinkGroup>
+              </Footer.LinkGroup> */}
             </div>
             <div>
-              <Footer.Title title="Legal" />
+              {/* <Footer.Title title="Legal" />
               <Footer.LinkGroup col>
                 <Footer.Link href="#">Privacy Policy</Footer.Link>
-                <Footer.Link href="#">Terms &amp; Conditions</Footer.Link>
-              </Footer.LinkGroup>
+                <Footer.Link href="#">Terms &amp; Conditions</Footer.Link> */}
+              {/* </Footer.LinkGroup> */}
             </div>
           </div>
         </div>
@@ -78,7 +78,7 @@ export default function FooterCom() {
             <Footer.Icon href="#" icon={BsFacebook} />
             <Footer.Icon href="#" icon={BsInstagram} />
             <Footer.Icon href="#" icon={BsTwitter} />
-            <Footer.Icon href="https://github.com/ammen1" icon={BsGithub} />
+            <Footer.Icon href="http://localhost:5173/" icon={BsGithub} />
             <Footer.Icon href="#" icon={BsDribbble} />
           </div>
         </div>

@@ -74,13 +74,12 @@ export default function UpdatePost() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const validTasks = formData.tasks.filter(
-        (task) => task.name.trim() !== ""
-      );
+      // const validTasks = formData.tasks.filter(
+      //   (task) => task.name.trim() !== ""
+      // );
       const projectDataWithManager = {
         ...formData,
         manager: { _id: selectedManager },
-        tasks: validTasks,
       };
 
       console.log("Project Data:", projectDataWithManager);
@@ -109,31 +108,31 @@ export default function UpdatePost() {
     }
   };
 
-  const handleTaskChange = (index, field, value) => {
-    const updatedTasks = [...formData.tasks];
-    updatedTasks[index][field] = value;
-    setFormData({ ...formData, tasks: updatedTasks });
-  };
+  // const handleTaskChange = (index, field, value) => {
+  //   const updatedTasks = [...formData.tasks];
+  //   updatedTasks[index][field] = value;
+  //   setFormData({ ...formData, tasks: updatedTasks });
+  // };
 
-  const addTask = () => {
-    setFormData({
-      ...formData,
-      tasks: [
-        ...formData.tasks,
-        {
-          name: "",
-          description: "",
-          status: "NotStarted",
-        },
-      ],
-    });
-  };
+  // const addTask = () => {
+  //   setFormData({
+  //     ...formData,
+  //     tasks: [
+  //       ...formData.tasks,
+  //       {
+  //         name: "",
+  //         description: "",
+  //         status: "NotStarted",
+  //       },
+  //     ],
+  //   });
+  // };
 
-  const removeTask = (index) => {
-    const updatedTasks = [...formData.tasks];
-    updatedTasks.splice(index, 1);
-    setFormData({ ...formData, tasks: updatedTasks });
-  };
+  // const removeTask = (index) => {
+  //   const updatedTasks = [...formData.tasks];
+  //   updatedTasks.splice(index, 1);
+  //   setFormData({ ...formData, tasks: updatedTasks });
+  // };
 
   return (
     <div className="min-h-screen mt-20 lg:mr-44 text-white">
@@ -187,6 +186,17 @@ export default function UpdatePost() {
                   setFormData({ ...formData, location: e.target.value })
                 }
               />
+              <Label value="start date" />
+              <TextInput
+                type="date"
+                placeholder="start date"
+                required
+                id="endDate"
+                value={formData.startDate}
+                onChange={(e) =>
+                  setFormData({ ...formData, startDate: e.target.value })
+                }
+              />
               <Label value="end date" />
               <TextInput
                 type="date"
@@ -232,48 +242,6 @@ export default function UpdatePost() {
                 </option>
               ))}
             </Select>
-
-            {formData.tasks.map((task, index) => (
-              <div key={index} className="flex flex-col gap-4">
-                <Label value="task" />
-                <TextInput
-                  type="text"
-                  placeholder="task name"
-                  required
-                  value={task.name}
-                  onChange={(e) =>
-                    handleTaskChange(index, "name", e.target.value)
-                  }
-                />
-                <Label value="description" />
-                <TextInput
-                  type="text"
-                  placeholder="description"
-                  value={task.description}
-                  onChange={(e) =>
-                    handleTaskChange(index, "description", e.target.value)
-                  }
-                />
-                <Label value="date" />
-                <TextInput
-                  type="date"
-                  placeholder="due date"
-                  value={task.dueDate}
-                  onChange={(e) =>
-                    handleTaskChange(index, "dueDate", e.target.value)
-                  }
-                />
-
-                <Button type="button" onClick={() => removeTask(index)}>
-                  Remove Task
-                </Button>
-              </div>
-            ))}
-
-            <Button type="button" onClick={addTask}>
-              Add Task
-            </Button>
-
             <Button type="submit" gradientDuoTone="purpleToPink">
               Publish
             </Button>

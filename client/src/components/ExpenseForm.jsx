@@ -8,6 +8,8 @@ export default function ExpenseForm() {
   const { addExpense, expenses, getExpenses, deleteExpense, error, setError } =
     useGlobalContext();
   const [errorMessage, setErrorMessage] = useState(null);
+  const [userProjects, setUserProjects] = useState([]);
+  const [projectId, setProjectId] = useState("");
   const [loading, setLoading] = useState(false);
   const [inputState, setInputState] = useState({
     title: "",
@@ -20,6 +22,35 @@ export default function ExpenseForm() {
     getExpenses();
   }, []);
 
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch("/api/project/getprojects");
+        const data = await res.json();
+
+        if (Array.isArray(data.projects)) {
+          setUserProjects(data.projects);
+        } else {
+          setError("Invalid projects data format. Please try again later.");
+        }
+      } catch (error) {
+        setError("Error fetching projects. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, []);
+
+  // const { title, amount, category, description} = inputState;
+
+  // const handleInput = (name) => (e) => {
+  //   setInputState({ ...inputState, [name]: e.target.value });
+  //   setError(""); // Clear error when user starts typing
+  // };
+
   const { title, amount, category, description } = inputState;
 
   const handleInput = (name) => (e) => {
@@ -31,7 +62,14 @@ export default function ExpenseForm() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await addExpense(inputState);
+      if (!projectId || !title || !category || !description) {
+        throw new Error("Project ID, title, category, and description are required!");
+      }
+      if (isNaN(amount) || amount <= 0) {
+        throw new Error("Amount must be a positive number!");
+      }
+
+      const response = await addExpense({ ...inputState, projectId });
       console.log("Response from server:", response);
       setInputState({
         title: "",
@@ -39,12 +77,15 @@ export default function ExpenseForm() {
         category: "",
         description: "",
       });
+      setProjectId(""); // Reset the project selection after submission
     } catch (error) {
       setErrorMessage(error.message);
     } finally {
       setLoading(false);
     }
   };
+
+
 
   return (
     <div className="min-h-screen self-center ">
@@ -87,6 +128,20 @@ export default function ExpenseForm() {
         <div className="md:flex-1">
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             {error && <Alert color="failure">{error}</Alert>}
+            <Label value="Project" />
+            <select
+              name="project"
+              value={projectId}
+              onChange={(e) => setProjectId(e.target.value)}
+              className="input-field"
+            >
+              <option value="">Select Project</option>
+              {userProjects.map((project) => (
+                <option key={project._id} value={project._id}>
+                  {project.name}
+                </option>
+              ))}
+            </select>
             <Label value="Expense Title" />
             <TextInput
               type="text"

@@ -98,13 +98,6 @@ const Home = () => {
                     ))}
                   </ul>
                 </ScrollParallax>
-
-                {/* <ScrollParallax isAbsolutelyPositioned>
-                  <Notification
-                    className="hidden absolute -right-[5.5rem] bottom-[11rem] w-[18rem] xl:flex"
-                    title="Code generation"
-                  />
-                </ScrollParallax> */}
               </div>
             </div>
             <Gradient />

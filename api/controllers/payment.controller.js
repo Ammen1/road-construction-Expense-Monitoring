@@ -1,14 +1,64 @@
 import Payment from "../models/payment.model.js";
+import Project from "../models/allocateBudget.model.js";
 
 // Controller to create a new payment
 export const createPayment = async (req, res) => {
   try {
-    const { tin, name, amount } = req.body;
-    const payment = new Payment({ tin, name, amount });
-    await payment.save();
-    res.status(201).json({ success: true, data: payment });
+    const { projectId, tin, name, amount } = req.body;
+    const project = await Project.findById(projectId);
+
+    if (!project) {
+      return res.status(404).json({ message: 'Project not found' });
+    }
+
+    const payment = new Payment({ project: projectId, tin, name, amount });
+
+    // Check if payment is active
+    if (payment.approved === false) {
+      await payment.save();
+      await project.save();
+      res.status(201).json({ success: true, data: payment });
+    } else {
+      return res.status(400).json({ success: false, message: 'Cannot create payment if payment is active' });
+    }
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });
+  }
+};
+
+
+
+
+// Function to approve a payment
+export const approvePayment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const payment = await Payment.findById(id);
+    
+    if (!payment) {
+      return res.status(404).json({ message: 'Payment not found' });
+    }
+
+    // Mark the payment as approved
+    payment.approved = true;
+    await payment.save();
+
+    // Update project budget
+    const project = await Project.findById(payment.project);
+    if (!project) {
+      return res.status(404).json({ message: 'Project not found' });
+    }
+    
+    if (project.budget >= payment.amount) {
+      project.budget -= payment.amount;
+      await project.save();
+    } else {
+      return res.status(400).json({ success: false, error: 'Insufficient project budget' });
+    }
+
+    res.status(200).json({ success: true, data: payment });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
   }
 };
 

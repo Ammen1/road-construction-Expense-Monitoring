@@ -5,15 +5,17 @@ import {
   getPaymentById,
   updatePayment,
   deletePayment,
+  approvePayment,
 } from "../controllers/payment.controller.js"
 
 const router = express.Router();
 
 // Route to create a new payment
-router.post('/payments', createPayment);
+router.post('/payments/create', createPayment);
 
 // Route to get all payments
 router.get('/payments', getAllPayments);
+router.put('/payments/:id/approve', approvePayment);
 
 // Route to get a single payment by ID
 router.get('/payments/:id', getPaymentById);

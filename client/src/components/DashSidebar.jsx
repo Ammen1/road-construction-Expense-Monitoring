@@ -133,17 +133,6 @@ export default function DashSidebar() {
           </Link>
           )}
           {currentUser && currentUser.isManager && (
-           <Link to="/dashboard?tab=create-expense">
-           <Sidebar.Item
-             active={tab === "create-expense"}
-             icon={HiBell}
-             as="div"
-           >
-             Notifications
-           </Sidebar.Item>
-         </Link>
-          )}
-          {currentUser && currentUser.isManager && (
           <Link to="/dashboard?tab=project">
             <Sidebar.Item
                active={tab === "project"}
@@ -151,17 +140,6 @@ export default function DashSidebar() {
                as="div"
              >
                Projects
-             </Sidebar.Item>
-           </Link>
-         )}
-          {currentUser && currentUser.isManager && (
-          <Link to="/dashboard?tab=post_activity">
-            <Sidebar.Item
-               active={tab === "post_activity"}
-               icon={HiPlus}
-               as="div"
-             >
-               Post Activity
              </Sidebar.Item>
            </Link>
          )}
@@ -276,15 +254,7 @@ export default function DashSidebar() {
                   Users
                 </Sidebar.Item>
               </Link>
-              <Link to="/dashboard?tab=comments">
-                <Sidebar.Item
-                  active={tab === "comments"}
-                  icon={HiAnnotation}
-                  as="div"
-                >
-                  Comments
-                </Sidebar.Item>
-              </Link>
+              
               <Link to="/dashboard?tab=create-budget">
                 <Sidebar.Item
                   active={tab === "create-budget"}
@@ -314,9 +284,18 @@ export default function DashSidebar() {
                   See Report
                 </Sidebar.Item>
               </Link>
-              <Link to="/dashboard?tab=create-expense">
+              <Link to="/dashboard?tab=notifconstructor">
                 <Sidebar.Item
-                  active={tab === "create-expense"}
+                  active={tab === "notifconstructor"}
+                  icon={HiOutlineBadgeCheck}
+                  as="div"
+                >
+                 Notif
+                </Sidebar.Item>
+              </Link>
+              <Link to="/dashboard?tab=approve-payment">
+                <Sidebar.Item
+                  active={tab === "approve-payment"}
                   icon={HiEmojiHappy}
                   as="div"
                 >

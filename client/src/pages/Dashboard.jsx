@@ -22,6 +22,10 @@ import DashboardManager from "../components/DashboardManger";
 import CardBuy from "./CardBuy";
 import Report from "../components/Report";
 import ProjectReport from "../components/ProjectReport";
+import PaymentComponent from "./PaymentComponent";
+import MyPayment from "../components/MyPayment";
+import NotifiContructor from "../components/NotifiConstructor";
+import ApprovePayment from "../components/ApprovePayment";
 
 export default function Dashboard() {
   const location = useLocation();
@@ -58,12 +62,15 @@ export default function Dashboard() {
       {tab === "myapplication" && <DashMyApplication />}
       {tab === "audit" && <DashFinance />}
       {tab === "task" && <DashTasks />}
-      {tab === "notif" && <Notification />}
       {tab === "post_activity" && <PostActivity />}
       {tab === "dashs" && <DashboardManager />}
       {tab === "buy" && <CardBuy />}
       {tab === "report" && <Report/>}
       {tab === "see_report" && <ProjectReport/>}
+      {tab === "payment" && <PaymentComponent/>}
+      {tab === "mypayment" && <MyPayment/>}
+      {tab === "notifconstructor" && <NotifiContructor/>}
+      {tab === "approve-payment" && <ApprovePayment/>}
     </div>
   );
 }

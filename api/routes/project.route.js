@@ -9,6 +9,7 @@ import {
   generateProjectReport,
   generateProjectReports,
   getProjectReport,
+  updateProjectStatus,
 
 } from "../controllers/allocatBudget.controller.js";
 import { verifyToken } from "../utils/verifyUser.js";
@@ -32,5 +33,6 @@ router.get("/managerproject/:userId", getProjectByManager);
 router.post("/reports", generateProjectReport);
 router.post('/generate', generateProjectReports);
 router.get('/report', getProjectReport);
+router.put('/projects/:projectId/status', updateProjectStatus);
 
 export default router;

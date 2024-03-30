@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Table, Button } from 'flowbite-react';
+import { Table, Button, Select } from 'flowbite-react';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import PostActivity from '../pages/PostActivity';
 
-const TaskList = (taskId) => {
+const TaskList = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showPostActivity, setShowPostActivity] = useState(false);
+  const [selectedTaskId, setSelectedTaskId] = useState(null);
 
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/task/');
+        const response = await fetch('/api/task/');
         const data = await response.json();
 
         if (response.ok) {
@@ -33,8 +34,85 @@ const TaskList = (taskId) => {
     fetchTasks();
   }, []);
 
-  const handleCreateSubtask = (taskId) => {
-    setShowPostActivity(true);
+  const handleUpdateTask = async (taskId, updatedData) => {
+    try {
+      const response = await fetch(`/api/task/update/${taskId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedData),
+      });
+
+      if (response.ok) {
+        // Optionally, update state or perform any necessary actions
+        console.log('Task updated successfully');
+      } else {
+        setError('Failed to update task');
+      }
+    } catch (error) {
+      setError('Something went wrong while updating the task');
+    }
+  };
+  const handleChangeStage = async (taskId, newStage) => {
+    try {
+      const response = await fetch(`/api/task/tasks/${taskId}/stage`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ stage: newStage }),
+      });
+  
+      if (response.ok) {
+        // Update the stage locally
+        setTasks((prevTasks) =>
+          prevTasks.map((task) => {
+            if (task._id === taskId) {
+              return { ...task, stage: newStage };
+            } else {
+              return task;
+            }
+          })
+        );
+      } else {
+        setError('Failed to update task stage');
+      }
+    } catch (error) {
+      setError('Something went wrong while updating the task stage');
+    }
+  };
+  const handleDeleteTask = async (taskId) => {
+    try {
+      const response = await fetch(`/api/task/task/${taskId}`, {
+        method: 'DELETE',
+      });
+  
+      if (response.ok) {
+        setTasks((prevTasks) => prevTasks.filter((task) => task._id !== taskId));
+      } else {
+        setError('Failed to delete task');
+      }
+    } catch (error) {
+      setError('Something went wrong while deleting the task');
+    }
+  };
+
+  const renderTaskRows = () => {
+    return tasks.map((task) => (
+      <Table.Row key={task._id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
+        <Table.Cell>{task.title}</Table.Cell>
+        {/* <Table.Cell>{new Date(task.date).toLocaleDateString()}</Table.Cell> */}
+        <Table.Cell>{task.priority}</Table.Cell>
+        <Table.Cell>
+          {task.stage}
+        </Table.Cell>
+        <Table.Cell>{task.assets}</Table.Cell>
+        <Table.Cell>
+          <Button color="red" onClick={() => handleDeleteTask(task._id)}>Delete</Button>
+        </Table.Cell>
+      </Table.Row>
+    ));
   };
 
   if (loading) {
@@ -46,7 +124,7 @@ const TaskList = (taskId) => {
   }
 
   return (
-    <div className="table-auto max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
+    <div className="table-auto max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 ">
       {currentUser.isManager && (
         <Link to="/dashboard?tab=create-task">
           <Button type="button" gradientDuoTone="purpleToPink">
@@ -56,45 +134,14 @@ const TaskList = (taskId) => {
       )}
       <Table hoverable shadow="md" className="shadow-md mt-6 w-full">
         <Table.Head>
-          <Table.HeadCell>TITLE</Table.HeadCell>
-          <Table.HeadCell>DATE</Table.HeadCell>
+          <Table.HeadCell>NAME</Table.HeadCell>
           <Table.HeadCell>PRIORITY</Table.HeadCell>
           <Table.HeadCell>STAGE</Table.HeadCell>
-          <Table.HeadCell>ASSIGNED TO</Table.HeadCell>
           <Table.HeadCell>ASSETS</Table.HeadCell>
-          <Table.HeadCell>ADD SUB TASKS</Table.HeadCell>
+          <Table.HeadCell>ACTION</Table.HeadCell> {/* Added action column */}
         </Table.Head>
-        <Table.Body>
-          {tasks.map((task) => (
-            <Table.Row key={task._id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
-              <Table.Cell>{task.title}</Table.Cell>
-              <Table.Cell>{new Date(task.date).toLocaleDateString()}</Table.Cell>
-              <Table.Cell>{task.priority}</Table.Cell>
-              <Table.Cell>{task.stage}</Table.Cell>
-              <Table.Cell>
-                <ul>
-                  {task.team.map((member) => (
-                    <li key={member._id}>{member.username}</li>
-                  ))}
-                </ul>
-              </Table.Cell>
-              <Table.Cell>
-                <ul>
-                  {task.assets.map((asset, index) => (
-                    <li key={index}>{asset}</li>
-                  ))}
-                </ul>
-              </Table.Cell>
-              <Table.Cell>
-                <Button color="info" onClick={() => handleCreateSubtask(task._id)}>
-                  Add Subtask
-                </Button>
-              </Table.Cell>
-            </Table.Row>
-          ))}
-        </Table.Body>
+        <Table.Body>{renderTaskRows()}</Table.Body>
       </Table>
-      {showPostActivity && <PostActivity id={taskId} onSubTaskCreated={() => setShowPostActivity(false)} />}
     </div>
   );
 };

@@ -202,8 +202,8 @@ export const getTasks = async (req, res) => {
         select: "username",
       })
       .populate({
-        path: "activities",
-        select: "activity.by",
+        path: "project",
+        select: "name",
       })
       .sort({ _id: -1 });
 
@@ -359,16 +359,52 @@ export const getNoticeData = async (req, res) => {
 
 export const handleChangeStage = async (taskId, newStage) => {
   try {
-    // Find the task by its ID and update its stage
-    const updatedTask = await Task.findByIdAndUpdate(taskId, { stage: newStage }, { new: true });
+    // Find the task by its ID
+    const task = await Task.findById(taskId);
 
-    if (!updatedTask) {
+    if (!task) {
       console.log(`Task with ID ${taskId} not found`);
       return; // Exit function if task not found
     }
 
-    console.log(`Stage of task ${taskId} updated to ${newStage}`);
+    // Check the current stage of the task and update it accordingly
+    if (task.stage === "todo" && newStage === "in progress") {
+      task.stage = "in progress";
+    } else if (task.stage === "in progress" && newStage === "completed") {
+      task.stage = "completed";
+    } else {
+      console.log(`Invalid stage transition from ${task.stage} to ${newStage}`);
+      return; // Exit function if the stage transition is invalid
+    }
+
+    // Save the updated task
+    await task.save();
+
+    console.log(`Stage of task ${taskId} updated to ${task.stage}`);
   } catch (error) {
     console.error(`Error updating stage of task ${taskId}:`, error);
+  }
+};
+
+
+
+export const deleteTask = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Find the task by ID and delete it
+    const deletedTask = await Task.findByIdAndDelete(id);
+
+    if (!deletedTask) {
+      // If task with the given ID doesn't exist
+      return res.status(404).json({ success: false, message: 'Task not found' });
+    }
+
+    // If task is successfully deleted
+    res.status(200).json({ success: true, message: 'Task deleted successfully' });
+  } catch (error) {
+    // If any error occurs during deletion
+    console.error('Error deleting task:', error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
   }
 };

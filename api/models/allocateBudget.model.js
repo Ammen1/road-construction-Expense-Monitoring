@@ -33,27 +33,12 @@ const projectSchema = new mongoose.Schema({
     default: "0",
 
   },
-  tasks: [
-    {
-      name: { type: String, required: true },
-      description: { type: String },
-      dueDate: {
-        type: Date,
-        validate: {
-          validator: function (dueDate) {
-            return dueDate > new Date();
-          },
-          message: "Due date must be in the future",
-        },
-      },
-      status: {
-        type: String,
-        enum: ["NotStarted", "InProgress", "Completed"],
-        default: "NotStarted",
-      },
-    },
-  ],
+  expense: {
+    type: String,
+    required: true,
+    default: "0",
 
+  },
   suppliers: [
     {
       user: {

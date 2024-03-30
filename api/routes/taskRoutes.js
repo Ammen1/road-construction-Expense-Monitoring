@@ -12,6 +12,7 @@ import {
   updateTask,
   getNoticeData,
   handleChangeStage,
+  deleteTask,
 } from "../controllers/taskController.js";
 // import { isAdminRoute, protectRoute } from "../middlewares/authMiddlewave.js";
 
@@ -34,6 +35,7 @@ router.delete(
   "/delete-restore/:id?",
   deleteRestoreTask
 );
+router.delete('/task/:id', deleteTask);
 router.put('/tasks/:taskId/stage', handleChangeStage);
 
 export default router;
