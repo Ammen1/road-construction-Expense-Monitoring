@@ -165,6 +165,8 @@ export const updateproject = async (req, res, next) => {
           manager: req.body.manager,
           employee: req.body.employee,
           status: req.body.status,
+          startDate: req.body.startDate,
+          endDate: req.body.endDate,
         },
       },
       { new: true }
@@ -183,9 +185,7 @@ export const generateProjectReport = async (req, res) => {
 
     // Create a new PDF document
     const doc = new PDFDocument();
-    // Pipe the PDF into a writeable stream to save to a file
-    const stream = fs.createWriteStream('project_report.pdf');
-    doc.pipe(stream);
+    const pdfPath = './project_report.pdf';
 
     // Generate report content
     doc.fontSize(14).text('Project Report', { align: 'center' }).moveDown();
@@ -203,25 +203,22 @@ export const generateProjectReport = async (req, res) => {
     });
 
     // Finalize the PDF
+    doc.pipe(fs.createWriteStream(pdfPath));
     doc.end();
 
     // Send the PDF file as a response
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', 'attachment; filename="project_report.pdf"');
-    fs.createReadStream('project_report.pdf').pipe(res);
+    fs.createReadStream(pdfPath).pipe(res);
   } catch (error) {
     console.error("Error generating project report:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
-
-
-
 export const generateProjectReports = async (req, res) => {
   try {
-    // Fetch projects from the database
-    const projects = await Project.find().populate('manager').populate('employee');
+    const { projectReport, budget, budgetDetails, requiredMaterials, machineryRequirements, laborRequirements, timeline, sitePreparation, environmentalConsiderations, safetyPlan } = req.body;
 
     // Create a new PDF document
     const doc = new PDFDocument();
@@ -229,31 +226,40 @@ export const generateProjectReports = async (req, res) => {
 
     // Generate report content
     doc.fontSize(14).text('Project Report', { align: 'center' }).moveDown();
-
-    projects.forEach(project => {
-      doc.fontSize(12)
-        .text(`Name: ${project.name}`)
-        .text(`Description: ${project.description}`)
-        .text(`Start Date: ${project.startDate}`)
-        .text(`End Date: ${project.endDate}`)
-        .text(`Location: ${project.location}`)
-        .text(`Manager: ${project.manager ? project.manager.name : 'N/A'}`)
-        .text(`Employee: ${project.employee ? project.employee.name : 'N/A'}`)
+    doc.fontSize(12)
+        .text(`Project Report: ${projectReport}`)
+        .text(`Budget: ${budget}`)
+        .text(`Budget Details: ${budgetDetails}`)
+        .text(`Required Materials: ${requiredMaterials}`)
+        .text(`Machinery Requirements: ${machineryRequirements}`)
+        .text(`Labor Requirements: ${laborRequirements}`)
+        .text(`Timeline: ${timeline}`)
+        .text(`Site Preparation: ${sitePreparation}`)
+        .text(`Environmental Considerations: ${environmentalConsiderations}`)
+        .text(`Safety Plan: ${safetyPlan}`)
         .moveDown();
-    });
 
     // Finalize the PDF and save to a file
     doc.pipe(fs.createWriteStream(pdfPath));
     doc.end();
 
-    // Save the PDF file to ManagerInput schema
+    // Save the PDF file to Report schema
     const pdfData = fs.readFileSync(pdfPath);
-    const managerInput = new ManagerInput({
+    const report = new ManagerInput({
       projectReport: pdfData, 
+      budget,
+      budgetDetails,
+      requiredMaterials,
+      machineryRequirements,
+      laborRequirements,
+      timeline,
+      sitePreparation,
+      environmentalConsiderations,
+      safetyPlan
     });
-    await managerInput.save();
+    await report.save();
 
-    // Send the PDF report to the manager via email
+    // Send the PDF report to the constructor via email
     await sendReportByEmail(pdfPath, 'amenguda@gmail.com'); 
 
     // Send the PDF file as a response
@@ -266,7 +272,7 @@ export const generateProjectReports = async (req, res) => {
   }
 };
 
-const sendReportByEmail = async (pdfPath, managerEmail) => {
+const sendReportByEmail = async (pdfPath, constructorEmail) => {
   try {
     // Create a Nodemailer transporter
     const transporter = nodemailer.createTransport({
@@ -281,8 +287,8 @@ const sendReportByEmail = async (pdfPath, managerEmail) => {
 
     // Setup email data
     const mailOptions = {
-      from: 'e-learning@gooderash.com',
-      to: managerEmail,
+      from:  'e-learning@gooderash.com',
+      to: constructorEmail,
       subject: 'Project Report',
       text: 'Please find the attached project report.',
       attachments: [{
@@ -292,11 +298,12 @@ const sendReportByEmail = async (pdfPath, managerEmail) => {
     };
     // Send email
     await transporter.sendMail(mailOptions);
-    console.log('Report sent to manager successfully');
+    console.log('Report sent to constructor successfully');
   } catch (error) {
     console.error('Error sending email:', error);
   }
 };
+
 
 
 
@@ -315,5 +322,28 @@ export const getProjectReport = async (req, res) => {
   } catch (error) {
     console.error("Error fetching project report:", error);
     res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+
+export const updateProjectStatus = async (req, res) => {
+  const { projectId } = req.params;
+  const { status } = req.body;
+
+  try {
+    const project = await Project.findById(projectId);
+
+    if (!project) {
+      return res.status(404).json({ error: 'Project not found' });
+    }
+
+    project.status = status;
+
+    await project.save();
+
+    res.status(200).json({ message: 'Project status updated successfully', project });
+  } catch (error) {
+    console.error('Error updating project status:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
