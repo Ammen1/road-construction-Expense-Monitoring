@@ -18,7 +18,8 @@ export default function DashMyApplication() {
       try {
         setLoading(true);
         const response = await axios.get(`/api/supplier/applications?userId=${currentUser}`);
-        setApplications(response.data);
+        const filteredApplications = response.data.filter(application => application.user === currentUser._id);
+        setApplications(filteredApplications);
       } catch (error) {
         console.error('Error fetching applications:', error);
         setError('Error fetching applications. Please try again later.');
@@ -26,9 +27,10 @@ export default function DashMyApplication() {
         setLoading(false);
       }
     };
-
+  
     fetchApplications();
-  }, []);
+  }, [currentUser]); // Add currentUser as a dependency
+  
 
   const handleEditApplication = (applicationId) => {
     // Handle edit action here, e.g., navigate to edit page
@@ -42,7 +44,8 @@ export default function DashMyApplication() {
 
   const handleDeleteApplication = async () => {
     try {
-      await axios.delete(`/api/supplier/application/${applicationIdToDelete}`);
+      await axios.delete(`/api/supplier/application
+      /${applicationIdToDelete}`);
       setApplications(applications.filter(app => app._id !== applicationIdToDelete));
       setShowModal(false);
     } catch (error) {

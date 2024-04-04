@@ -26,7 +26,6 @@ const ApprovePayment = () => {
   const handleApprovePayment = async (paymentId) => {
     try {
       await axios.put(`/api/payment/payments/${paymentId}/approve`);
-      // Handle success if needed
       fetchPayments(); // Refresh payments after approval
     } catch (error) {
       console.error('Error approving payment:', error);

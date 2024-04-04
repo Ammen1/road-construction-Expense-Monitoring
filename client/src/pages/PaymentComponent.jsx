@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { useSelector } from 'react-redux';
+import { Button, TextInput } from "flowbite-react";
 
 const PaymentComponent = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [payments, setPayments] = useState([]);
-  const [newPayment, setNewPayment] = useState({ tin: '', name: '', amount: '', userId: '', projectName: '', projectId: '' });
+  const [newPayment, setNewPayment] = useState({ tin: '', name: '', amount: '', projectId: '' });
   const [loading, setLoading] = useState(true);
   const [applications, setApplications] = useState([]);
 
@@ -29,7 +29,8 @@ const PaymentComponent = () => {
   const fetchApplications = async () => {
     try {
       const response = await axios.get(`/api/supplier/applications?userId=${currentUser}`);
-      setApplications(response.data);
+      const filteredApplications = response.data.filter(application => application.user === currentUser._id);
+      setApplications(filteredApplications);
     } catch (error) {
       console.error('Error fetching applications:', error);
     }
@@ -43,9 +44,10 @@ const PaymentComponent = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/payment/payments/create', newPayment);
+      const { projectId, tin, name, amount } = newPayment;
+      const response = await axios.post('/api/payment/payments/create', { projectId, tin, name, amount });
       setPayments(prevPayments => [...prevPayments, response.data]);
-      setNewPayment({ tin: '', name: '', amount: '', userId: '', projectName: '', projectId: '' });
+      setNewPayment({ tin: '', name: '', amount: '', projectId: '' });
       window.alert('Payment created successfully!');
     } catch (error) {
       console.error('Error creating payment:', error);
@@ -56,8 +58,8 @@ const PaymentComponent = () => {
     try {
       const selectedApplication = applications.find(application => application.project === projectId);
       if (selectedApplication) {
-        const { name: projectName } = selectedApplication;
-        setNewPayment({ ...newPayment, projectName, projectId });
+        
+        setNewPayment({ ...newPayment,  projectId });
       }
     } catch (error) {
       console.error('Error fetching project details:', error);

@@ -15,7 +15,7 @@ router.post('/payments/create', createPayment);
 
 // Route to get all payments
 router.get('/payments', getAllPayments);
-router.put('/payments/:id/approve', approvePayment);
+router.put('/payments/:paymentId/approve', approvePayment);
 
 // Route to get a single payment by ID
 router.get('/payments/:id', getPaymentById);

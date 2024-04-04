@@ -131,7 +131,7 @@ export default function CreateProject() {
     <div className="min-h-screen lg:mt-10 ">
       <div className="flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-5">
         {/* left */}
-        <div className="flex-1 justify-center items-center text-center lg:mb-96 lg:-translate-y-44">
+        <div className="flex-1 justify-center items-center text-center lg:mb-20 ">
           <Link to="/" className="font-bold dark:text-white text-4xl">
             <span className="px-2 py-1 text-center  bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white">
               Road Con
@@ -253,45 +253,6 @@ export default function CreateProject() {
                 </option>
               ))}
             </Select>
-            {formData.tasks.map((task, index) => (
-              <div key={index} className="flex flex-col gap-4">
-                <Label value="task" />
-                <TextInput
-                  type="text"
-                  placeholder="task name"
-                  required
-                  value={task.name}
-                  onChange={(e) =>
-                    handleTaskChange(index, "name", e.target.value)
-                  }
-                />
-                <Label value="description" />
-                <TextInput
-                  type="text"
-                  placeholder="description"
-                  value={task.description}
-                  onChange={(e) =>
-                    handleTaskChange(index, "description", e.target.value)
-                  }
-                />
-                <Label value="date" />
-                <TextInput
-                  type="date"
-                  placeholder="due date"
-                  value={task.dueDate}
-                  onChange={(e) =>
-                    handleTaskChange(index, "dueDate", e.target.value)
-                  }
-                />
-
-                <Button type="button" onClick={() => removeTask(index)}>
-                  Remove Task
-                </Button>
-              </div>
-            ))}
-            <Button type="button" onClick={addTask}>
-              Add Task
-            </Button>
             <Button type="submit" gradientDuoTone="purpleToPink">
               Publish
             </Button>
