@@ -1,4 +1,4 @@
-import Payment from "../models/payment.model.js";
+import Payment from "../models/payment.model.js"
 import Project from "../models/allocateBudget.model.js";
 
 // Controller to create a new payment
@@ -13,27 +13,24 @@ export const createPayment = async (req, res) => {
 
     const payment = new Payment({ project: projectId, tin, name, amount });
 
-    // Check if payment is active
-    if (payment.approved === false) {
       await payment.save();
       await project.save();
       res.status(201).json({ success: true, data: payment });
-    } else {
-      return res.status(400).json({ success: false, message: 'Cannot create payment if payment is active' });
-    }
+   
   } catch (error) {
+    console.log(error.message)
     res.status(400).json({ success: false, error: error.message });
   }
 };
 
 
 
-
 // Function to approve a payment
 export const approvePayment = async (req, res) => {
   try {
-    const { id } = req.params;
-    const payment = await Payment.findById(id);
+    const { paymentId } = req.params;
+    const payment = await Payment.findById(paymentId);
+    console.log(payment)
     
     if (!payment) {
       return res.status(404).json({ message: 'Payment not found' });
@@ -49,18 +46,19 @@ export const approvePayment = async (req, res) => {
       return res.status(404).json({ message: 'Project not found' });
     }
     
-    if (project.budget >= payment.amount) {
+    // if (project.budget >= payment.amount) {
       project.budget -= payment.amount;
       await project.save();
-    } else {
-      return res.status(400).json({ success: false, error: 'Insufficient project budget' });
-    }
+    // } else {
+    //   return res.status(400).json({ success: false, error: 'Insufficient project budget' });
+    // }
 
     res.status(200).json({ success: true, data: payment });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
 };
+
 
 export const getAllPayments = async (req, res) => {
   try {
