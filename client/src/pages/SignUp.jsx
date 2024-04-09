@@ -1,36 +1,85 @@
-import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import OAuth from "../components/OAuth";
 
-export default function SignUp() {
-  const [formData, setFormData] = useState({});
+export default function AddUsers() {
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+    role: "", // Added a new field for the selected role
+  });
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
+
+  const handleRoleChange = (e) => {
+    setFormData({ ...formData, role: e.target.value });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.username || !formData.email || !formData.password) {
+    if (
+      !formData.username ||
+      !formData.email ||
+      !formData.password ||
+      !formData.role
+    ) {
       return setErrorMessage("Please fill out all fields.");
     }
+
     try {
       setLoading(true);
       setErrorMessage(null);
+
+      // If the selected role is "Manager", set isManager to true
+      if (formData.role === "Manager") {
+        formData.isManager = true;
+        formData.isSupplier = false;
+        formData.isFinancer = false;
+        formData.isEmployee = false;
+      } else if (formData.role === "Supplier") {
+        formData.isSupplier = true;
+        formData.isManager = false;
+        formData.isFinance = false;
+        formData.isEmployee = false;
+      } else if (formData.role === "Finance") {
+        formData.isFinance = true;
+        formData.isManager = false;
+        formData.isSupplier = false;
+        formData.isEmployee = false;
+      } else if (formData.role === "Employee") {
+        formData.isFinance = false;
+        formData.isManager = false;
+        formData.isSupplier = false;
+        formData.isEmployee = true;
+      } else {
+        formData.isManager = false;
+        formData.isSupplier = false;
+        formData.isFinance = false;
+        formData.isEmployee = false;
+      }
+
       const res = await fetch("/api/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
       const data = await res.json();
+
       if (data.success === false) {
         return setErrorMessage(data.message);
       }
+
       setLoading(false);
+
       if (res.ok) {
-        navigate("/sign-in");
+        navigate("/dashboard?tab=users");
       }
     } catch (error) {
       setErrorMessage(error.message);
@@ -55,7 +104,6 @@ export default function SignUp() {
           </p>
         </div>
         {/* right */}
-
         <div className="flex-1">
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <div>
@@ -71,7 +119,7 @@ export default function SignUp() {
               <Label value="Your email" />
               <TextInput
                 type="email"
-                placeholder="name@company.com"
+                placeholder="amen@amen.com"
                 id="email"
                 onChange={handleChange}
               />
@@ -85,6 +133,20 @@ export default function SignUp() {
                 onChange={handleChange}
               />
             </div>
+            <Label value="Choose Role" />
+            <select
+              id="role"
+              className="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
+              onChange={handleRoleChange} // Added onChange event handler for role selection
+            >
+              <option value="" selected disabled>
+                Choose a role
+              </option>
+              <option value="Manager">isManager</option>
+              <option value="Supplier">isSupplier</option>
+              <option value="Finance">isFinance</option>
+              <option value="Employee">isEmployee</option>
+            </select>
             <Button
               gradientDuoTone="purpleToPink"
               type="submit"

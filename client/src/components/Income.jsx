@@ -1,10 +1,19 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useGlobalContext } from "../context/Context";
 import IncomeForm from "./IncomeForm";
 import IncomeItem from "../IncomeItem/IncomeItem";
+import EditIncomeForm from "./EditIncomeForm";
 
 function Income() {
-  const { incomes, getIncomes, deleteIncome, totalIncome } = useGlobalContext();
+  const { incomes, getIncomes, deleteIncome, totalIncome, editIncome } = useGlobalContext();
+  const [editFormData, setEditFormData] = useState(null);
+
+  const handleEdit = (income) => {
+    setEditFormData(income);
+  };
+  const handleCancelEdit = () => {
+    setEditFormData(null);
+  };
 
   useEffect(() => {
     getIncomes();
@@ -20,6 +29,15 @@ function Income() {
           <div className="form-container">
             <IncomeForm />
           </div>
+          {editFormData && (
+            <div className="form-container">
+              <EditIncomeForm
+                income={editFormData}
+                onCancelEdit={handleCancelEdit}
+                editIncome={editIncome}
+              />
+            </div>
+          )}
           <div className="incomes">
             {incomes.map((income) => {
               const { _id, title, amount, date, category, description, type } =
@@ -36,6 +54,7 @@ function Income() {
                   category={category}
                   indicatorColor="var(--color-green)"
                   deleteItem={deleteIncome}
+                  editItem={handleEdit}
                 />
               );
             })}

@@ -32,7 +32,19 @@ export const GlobalProvider = ({children}) => {
         const res  = await axios.delete(`${BASE_URL}delete-income/${id}`)
         getIncomes()
     }
-
+    const editIncome = async (incomeId, newData) => {
+        try {
+            const res = await axios.put(`${BASE_URL}editincome/${incomeId}`, newData);
+            // Assuming that the edit operation was successful, you can refresh the incomes data
+            getIncomes();
+            return res.data; // Return the response data
+        } catch (error) {
+            console.error("Error editing income:", error);
+            throw error; // Re-throw the error
+        }
+    };
+    
+    
     const totalIncome = () => {
         let totalIncome = 0;
         incomes.forEach((income) =>{
@@ -91,6 +103,7 @@ export const GlobalProvider = ({children}) => {
         <GlobalContext.Provider value={{
             addIncome,
             getIncomes,
+            editIncome,
             incomes,
             deleteIncome,
             expenses,

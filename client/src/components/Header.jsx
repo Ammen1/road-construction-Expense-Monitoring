@@ -1,4 +1,4 @@
-import { Avatar, Button, Dropdown, Navbar, TextInput } from "flowbite-react";
+import { Avatar, Button, Card, Dropdown, Navbar, TextInput } from "flowbite-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon, FaSun } from "react-icons/fa";
@@ -49,7 +49,7 @@ export default function Header() {
   };
 
   return (
-    <Navbar className="border-b-2 dark:black py-4 p-6 ">
+    <Navbar className="border-b-2  py-4 p-6 ">
       <Link
         to="/"
         className="self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white"
@@ -73,14 +73,17 @@ export default function Header() {
         <AiOutlineSearch />
       </Button>
       <div className="flex gap-2 md:order-2">
-        <Button
-          className="w-12 h-10 hidden sm:inline"
-          color="gray"
-          pill
-          onClick={() => dispatch(toggleTheme())}
+      {currentUser ? (
+        <Card
+          className="h-10 mt-2 text-center hidden sm:inline "    
         >
-          {theme === "light" ? <FaSun /> : <FaMoon />}
-        </Button>
+          <h1 className=" mr-10">Hi! {currentUser.username}</h1>
+        </Card>
+         ) : (
+          <Link >
+            
+          </Link>
+        )}
         {currentUser ? (
           <Dropdown
             arrowIcon={false}
@@ -89,6 +92,7 @@ export default function Header() {
               <Avatar alt="user" img={currentUser.profilePicture} rounded />
             }
           >
+            
             <Dropdown.Header>
               <span className="block text-sm">@{currentUser.username}</span>
               <span className="block text-sm font-medium truncate">
@@ -120,9 +124,6 @@ export default function Header() {
         <Navbar.Link active={path === "/projects"} as={"div"}>
           <Link to="/projects">Projects</Link>
         </Navbar.Link>
-        {/* <Navbar.Link active={path === "/group"} as={"div"}>
-          <Link to="/group">Our Group</Link>
-        </Navbar.Link> */}
       </Navbar.Collapse>
     </Navbar>
   );

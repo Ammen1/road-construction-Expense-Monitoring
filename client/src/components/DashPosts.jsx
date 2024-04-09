@@ -110,6 +110,7 @@ export default function DashPosts() {
       if (!res.ok) {
         console.log(data.message);
       } else {
+        // Filter out the deleted project from userProjects
         setUserProjects((prev) =>
           prev.filter((project) => project._id !== projectIdToDelete)
         );
@@ -118,6 +119,8 @@ export default function DashPosts() {
       console.log(error.message);
     }
   };
+  
+  
 
   const calculateTotalBudget = (budget) => {
     const { materials, labor, equipment, permits } = budget;

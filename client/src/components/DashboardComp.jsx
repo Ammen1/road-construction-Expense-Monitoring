@@ -66,7 +66,7 @@ export default function DashboardComp() {
               <h3 className="text-gray-500 uppercase text-md">Total Users</h3>
               <p className="text-2xl">{totalUsers}</p>
             </div>
-            <HiOutlineUserGroup className="p-3 text-5xl text-white bg-teal-600 rounded-full shadow-lg" />
+            <h1 className="p-3 text-5xl text-white bg-teal-600 rounded-full shadow-lg" />
           </div>
           <div className="flex gap-2 text-sm">
             <span className="flex items-center text-green-500">
@@ -85,7 +85,7 @@ export default function DashboardComp() {
               <span>{totalBalance()}</span>
             </h2>
           </div>
-          <HiDocumentText className="p-3 text-5xl text-white rounded-full shadow-lg bg-lime-600" />
+          <h1 className="p-3 text-5xl text-white rounded-full shadow-lg bg-lime-600" />
         </div>
 
         </div>              
@@ -97,7 +97,7 @@ export default function DashboardComp() {
                 <span>{totalExpenses()}</span>
               </h2>
             </div>
-            <HiDocumentText className="p-3 text-5xl text-white rounded-full shadow-lg bg-lime-600" />
+            <h1 className="p-3 text-5xl text-white rounded-full shadow-lg bg-lime-600" />
           </div>
         </div>
           <div className="flex flex-col w-full gap-4 p-3 rounded-md shadow-md dark:bg-slate-800 md:w-72">
@@ -108,7 +108,7 @@ export default function DashboardComp() {
                 <span>{totalIncome()}</span>
               </h2>
             </div>
-            <HiDocumentText className="p-3 text-5xl text-white rounded-full shadow-lg bg-lime-600" />
+            <h1 className="p-3 text-5xl text-white rounded-full shadow-lg bg-lime-600" />
           </div>
         </div>
         <div className="flex flex-col w-full gap-4 p-3 rounded-md shadow-md dark:bg-slate-800 md:w-72">
@@ -119,7 +119,7 @@ export default function DashboardComp() {
               </h3>
               <p className="text-2xl">{totalProjects}</p>
             </div>
-            <HiDocumentText className="p-3 text-5xl text-white rounded-full shadow-lg bg-lime-600" />
+            <h1 className="p-3 text-5xl text-white rounded-full shadow-lg bg-lime-600" />
           </div>
           <div className="flex gap-2 text-sm">
             <span className="flex items-center text-green-500">
