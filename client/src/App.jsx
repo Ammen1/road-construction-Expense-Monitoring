@@ -15,6 +15,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import Projects from "./pages/Projects";
 import Group from "./pages/Group";
 import Apply from "./pages/Apply";
+import EditIncomeForm from "./components/EditIncomeForm";
 
 export default function App() {
   return (
@@ -26,7 +27,8 @@ export default function App() {
         <Route path="/projects" element={<Projects />} />
         <Route path="/group" element={<Group />} />
         <Route path="/sign-in" element={<SignIn />} />
-        <Route path="/sign-up" element={<SignUp />} />    
+        <Route path="/sign-up" element={<SignUp />} />  
+        <Route path="/editincome/:incomeId" element={<EditIncomeForm />} />  
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/create-expense" element={<Expenses />} />
@@ -36,6 +38,7 @@ export default function App() {
           <Route path="/create-project" element={<CreatePost />} />
           <Route path="/update-post/:projectId" element={<UpdatePost />} />
           <Route path="/add-users" element={<AddUsers />} />
+          
         </Route>
       </Routes>
       <Footer />
