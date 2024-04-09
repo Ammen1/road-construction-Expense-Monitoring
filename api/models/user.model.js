@@ -36,18 +36,7 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    tin: {
-      type: String,
-      required: function () {
-        return this.isSupplier === true;
-      },
-    },
-    city: {
-      type: String,
-      required: function () {
-        return this.isSupplier === true;
-      },
-    },
+  
   },
   { timestamps: true }
 );
